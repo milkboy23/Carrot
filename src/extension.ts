@@ -54,14 +54,19 @@ export function activate(context: vscode.ExtensionContext) {
 				}
 			});
 
-			const placeIcon = await editor.edit(editBuilder => {
-				editBuilder.replace(selection, "//ICON");
+			const decorationType = vscode.window.createTextEditorDecorationType({
+				gutterIconPath : "..\media\images\carrot-decoration.svg",
+				gutterIconSize : "contain"
+				//isWholeLine : true
 			});
 
-			if(!placeIcon){
-				vscode.window.showErrorMessage("IDK bro seems weird");
-			}
+			const decorationOptions : vscode.DecorationOptions[] = [];
 
+			const decoration = {range: new vscode.Range(start, start), hoverMessage: textFromComment};
+
+			decorationOptions.push(decoration);
+
+			editor.setDecorations(decorationType, decorationOptions);
 
 		})
 	);
