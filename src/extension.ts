@@ -38,10 +38,13 @@ export function activate(context: vscode.ExtensionContext) {
 				return;
 			}
 
-			let myHover = new vscode.Hover(comment);
+			let firstslashremoved = comment.replace(comment.charAt(0), "");
+			let textFromComment = firstslashremoved.replace(firstslashremoved.charAt(0), "");
+
+			let myHover = new vscode.Hover(textFromComment);
 			let myContents = myHover.contents;
 
-			vscode.languages.registerHoverProvider('typescript', {
+			vscode.languages.registerHoverProvider('java', {
 				provideHover(document, position, token) {
 					return {
 						contents: myContents
