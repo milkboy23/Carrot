@@ -22,7 +22,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	
 	context.subscriptions.push(
-		vscode.commands.registerCommand('carrot.createCarrot', () => {
+		vscode.commands.registerCommand('carrot.createCarrot', async () => {
 			const editor = vscode.window.activeTextEditor;
 
 			if(!editor){
@@ -48,6 +48,14 @@ export function activate(context: vscode.ExtensionContext) {
 					};
 				}
 			});
+
+			const placeIcon = await editor.edit(editBuilder => {
+				editBuilder.replace(selection, "//ICON");
+			});
+
+			if(!placeIcon){
+				vscode.window.showErrorMessage("IDK bro seems weird");
+			}
 
 
 		})
