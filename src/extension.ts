@@ -19,6 +19,14 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.showInformationMessage('Hello World from Carrot!');
 	});
 
+	vscode.languages.registerHoverProvider('typescript', {
+		provideHover(document, position, token) {
+			return {
+				contents: ['Carrot Hover']
+			};
+		}
+	});
+
 	context.subscriptions.push(disposable);
 }
 
