@@ -19,17 +19,39 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.showInformationMessage('Hello World from Carrot!');
 	});
 
-	let myHover = new vscode.Hover('Hello Carrot');
 
-	let myContents = myHover.contents;
+	
+	context.subscriptions.push(
+		vscode.commands.registerCommand('carrot.createCarrot', () => {
+			const editor = vscode.window.activeTextEditor;
 
-	vscode.languages.registerHoverProvider('typescript', {
-		provideHover(document, position, token) {
-			return {
-				contents: myContents
-			};
-		}
-	});
+			if(!editor){
+				vscode.window.showWarningMessage("No editor in use");
+				return;
+			}
+
+			const selection = editor.selection;
+			const comment = editor.document.getText(selection);
+
+			if(!comment || comment.trim().length === 0) {
+				vscode.window.showWarningMessage("No text selected.");
+				return;
+			}
+
+			let myHover = new vscode.Hover(comment);
+			let myContents = myHover.contents;
+
+			vscode.languages.registerHoverProvider('typescript', {
+				provideHover(document, position, token) {
+					return {
+						contents: myContents
+					};
+				}
+			});
+
+
+		})
+	);
 
 	context.subscriptions.push(disposable);
 }
