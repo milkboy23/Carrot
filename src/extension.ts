@@ -31,6 +31,7 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 
 			const selection = editor.selection;
+			const start = selection.start;
 			const comment = editor.document.getText(selection);
 
 			if(!comment || comment.trim().length === 0) {
@@ -46,9 +47,10 @@ export function activate(context: vscode.ExtensionContext) {
 
 			vscode.languages.registerHoverProvider('java', {
 				provideHover(document, position, token) {
-					return {
-						contents: myContents
-					};
+						if(position.isEqual(start)){
+							return{
+							contents: myContents};
+						}
 				}
 			});
 
