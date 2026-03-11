@@ -20,7 +20,10 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 
-	
+/**
+ * CreateCarrot:
+ * 
+ *  */	
 	context.subscriptions.push(
 		vscode.commands.registerCommand('carrot.createCarrot', async () => {
 			const editor = vscode.window.activeTextEditor;
@@ -30,6 +33,7 @@ export function activate(context: vscode.ExtensionContext) {
 				return;
 			}
 
+			//Get highlighted text
 			const selection = editor.selection;
 			const start = selection.start;
 			const comment = editor.document.getText(selection);
@@ -39,35 +43,37 @@ export function activate(context: vscode.ExtensionContext) {
 				return;
 			}
 
+
+			//Remove '//' from comment
+			//TODO: iff (char is //) then replace it
 			let firstslashremoved = comment.replace(comment.charAt(0), "");
 			let textFromComment = firstslashremoved.replace(firstslashremoved.charAt(0), "");
 
-			let myHover = new vscode.Hover(textFromComment);
-			let myContents = myHover.contents;
+			//Removes highlighted text
+			const removed = await editor.edit(editBuilder => {
+                editBuilder.replace(selection, "");
+            });
+            if(!removed){
+                vscode.window.showErrorMessage("IDK bro seems weird");
+            }
+ 
 
-			vscode.languages.registerHoverProvider('java', {
-				provideHover(document, position, token) {
-						if(position.isEqual(start)){
-							return{
-							contents: myContents};
-						}
-				}
-			});
+			//1. Get decoration image path
+			const decoPath = vscode.Uri.joinPath(context.extensionUri, "media", "images", "carrot-decoration.svg"); 
 
+			//2. Define decoration type
 			const decorationType = vscode.window.createTextEditorDecorationType({
-				gutterIconPath : "..\media\images\carrot-decoration.svg",
-				gutterIconSize : "contain"
+				gutterIconPath : decoPath,
+				gutterIconSize : "contain",
 				//isWholeLine : true
 			});
-
+			
+			//Create empty deco options
 			const decorationOptions : vscode.DecorationOptions[] = [];
-
-			const decoration = {range: new vscode.Range(start, start), hoverMessage: textFromComment};
-
+			const decoration = {range: new vscode.Range(start.line+1, 0, start.line+1, 0), hoverMessage: textFromComment};
 			decorationOptions.push(decoration);
 
 			editor.setDecorations(decorationType, decorationOptions);
-
 		})
 	);
 
