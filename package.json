@@ -9,9 +9,31 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onView: carrot-sidebar-view"
+  ],
   "main": "./out/extension.js",
   "contributes": {
+     "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "carrot-sidebar-view",
+          "title": "Carrot",
+          "icon": "media/images/carrot-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "carrot-sidebar-view": [
+        {
+          "type": "webview",
+          "id": "carrot-sidebar",
+          "name": "Carrot",
+          "icon": "media/images/carrot-icon.svg",
+          "contextualTitle": "Carrot"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "carrot.helloWorld",
