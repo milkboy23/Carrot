@@ -44,7 +44,16 @@
         "category": "Carrot",
         "title": "Create New Carrot Comment"
       }
-    ]
+
+       ],
+        "keybindings": [
+      {
+        "command": "carrot.createCarrot",
+        "key": "ctrl+alt+c",
+        "mac": "cmd+alt+c",
+        "when": "editor.hasSelection"
+      }
+      ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
