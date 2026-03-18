@@ -2,17 +2,11 @@
 
 import * as vscode from 'vscode';
 import { SidebarProvider } from "./sidebarProvider";
-import { createDecoration } from "./decoration";
+import { Comment } from "./Comment";
+import { Note } from "./Note";
 
 
 export function activate(context: vscode.ExtensionContext) {
-	const sidebarProvider = new SidebarProvider(context.extensionUri);
-	context.subscriptions.push(
-		vscode.window.registerWebviewViewProvider(
-		"carrot-sidebar",
-		sidebarProvider
-		));
-
 	// The command has been defined in the package.json file
 	// The commandId parameter must match the command field in package.json
 	const disposable = vscode.commands.registerCommand('carrot.helloWorld', () => {
@@ -21,17 +15,38 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 
-/**
- * CreateCarrot:
- * 
- *  */	
+
+
+
+	// This provides the sidebar icon for Carrot extension
+	const sidebarProvider = new SidebarProvider(context.extensionUri);
+	context.subscriptions.push(
+		vscode.window.registerWebviewViewProvider(
+		"carrot-sidebar",
+		sidebarProvider
+		));
+
+	
+	// Creates a new Carrot comment (pop-up)
 	context.subscriptions.push(
 		vscode.commands.registerCommand('carrot.createCarrot', async () => {
-			const created = createDecoration(vscode.window.activeTextEditor, context);
+			const comment = new Comment(1, 1);
+			const created = comment.createDecoration(vscode.window.activeTextEditor, context);
 			if(!created){ 
 				vscode.window.showErrorMessage("Unable to create decoration sucks to suck");
 			}
 
+		})
+	);
+
+	// Create a new full-page Carrot note
+	context.subscriptions.push(
+		vscode.commands.registerCommand('carrot.note', () => {
+			const note = new Note(1, 1); //EF core come in a clutch	
+			const panel = note.createPanel(context);
+			if(!panel){
+				vscode.window.showErrorMessage("Panel is faulty.");
+			}
 		})
 	);
 
