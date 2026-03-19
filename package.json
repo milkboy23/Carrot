@@ -43,6 +43,11 @@
         "command": "carrot.createCarrot",
         "category": "Carrot",
         "title": "Create New Carrot Comment"
+      },
+      {
+        "command": "carrot.note",
+        "category": "Carrot",
+        "title": "Open Note"        
       }
 
        ],
