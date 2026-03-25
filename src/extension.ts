@@ -42,11 +42,8 @@ export function activate(context: vscode.ExtensionContext) {
 	// Create a new full-page Carrot note
 	context.subscriptions.push(
 		vscode.commands.registerCommand('carrot.note', () => {
-			const note = new Note(1, 1); //EF core come in a clutch	
-			const panel = note.createPanel(context);
-			if(!panel){
-				vscode.window.showErrorMessage("Panel is faulty.");
-			}
+			//const note = new Note(1, 1); //EF core come in a clutch	
+			Note.createOrShow(context.extensionUri);
 		})
 	);
 
