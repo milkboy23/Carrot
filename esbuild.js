@@ -1,5 +1,6 @@
 const esbuild = require('esbuild');
 
+//takes a typescript file (main.ts), bundles all its dependencies, minifies it, and outputs browser-ready javascript
 async function build() {
     await esbuild.build({
         entryPoints: ['src/webview/main.ts'],

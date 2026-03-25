@@ -8,7 +8,7 @@ const editor = Jodit.make('#editor', {
 });
 
 // Set initial value
-editor.value = '<p>start</p>';
+editor.value = '<p>start typing...</p>';
 
 // Optional: Communicate with the Extension Host
 const vscode = (window as any).acquireVsCodeApi();

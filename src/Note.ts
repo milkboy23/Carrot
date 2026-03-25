@@ -113,16 +113,7 @@ export class Note {
 		// Local path to main script run in the webview
 		// And the uri we use to load this script in the webview
 		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'webview.js'));
-
 		const styleUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'webview.css'));
-
-		// Local path to css styles
-		// const styleResetPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'reset.css');
-		// const stylesPathMainPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css');
-
-		// Uri to load styles into webview
-		//const stylesResetUri = webview.asWebviewUri(styleResetPath);
-		//const stylesMainUri = webview.asWebviewUri(stylesPathMainPath);
 
 		// Use a nonce to only allow specific scripts to be run
 		const nonce = getNonce();
