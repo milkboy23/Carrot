@@ -112,9 +112,9 @@ export class Note {
    	private _getHtmlForWebview(webview: vscode.Webview) {
 		// Local path to main script run in the webview
 		// And the uri we use to load this script in the webview
-		const joditJSUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'node_modules', 'jodit', 'jodit.min.js'));
+		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'webview.js'));
 
-		const joditCSSUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'node_modules', 'jodit', 'jodit.min.css'));
+		const styleUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'webview.css'));
 
 		// Local path to css styles
 		// const styleResetPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'reset.css');
@@ -127,45 +127,22 @@ export class Note {
 		// Use a nonce to only allow specific scripts to be run
 		const nonce = getNonce();
 
-		return `<!DOCTYPE html>
+		return `
+			<!DOCTYPE html>
 			<html lang="en">
 			<head>
 				<meta charset="UTF-8">
-
-				<!--
-					Use a content security policy to only allow loading images from https or from our extension directory,
-					and only allow scripts that have a specific nonce.
-				
-				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; img-src ${webview.cspSource} https:; script-src 'nonce-${nonce}';">
-				-->
-
-				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-				<link rel="stylesheet" href="${joditCSSUri}">
-
+				<link rel="stylesheet" href="${styleUri}">
 				<style>
-                    body { padding: 0; margin: 0; background-color: var(--vscode-editor-background); }
-                    /* Make sure the editor fits the sidebar width */
-                    .jodit-container { border: none !important; width: 100% !important; }
-                </style>
-
-				</head>
-				<body>
-					<textarea id="editor"></textarea>
-
-					<script src="${joditJSUri}"></script>
-					<script>
-						const vscode = acquireVsCodeApi();
-						const editor = Jodit.make('#editor', {
-							theme: 'dark', // You can sync this with VS Code themes later
-							height: '100%',
-							toolbarAdaptive: true,
-							buttons: 'bold,italic,underline,strikethrough,|,ul,ol,|,font,fontsize,brush,paragraph,|,link,table,|,undo,redo'
-						});
-                	</script>
-            	</body>
-            </html>
-        `;
-
+					html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
+					#editor { height: 100%; width: 100%; }
+				</style>
+			</head>
+			<body>
+				<textarea id="editor"></textarea>
+				<script src="${scriptUri}"></script>
+			</body>
+			</html>
+		`;
 	}
 }
