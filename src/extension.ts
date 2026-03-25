@@ -1,12 +1,15 @@
-
-
 import * as vscode from 'vscode';
 import { SidebarProvider } from "./sidebarProvider";
 import { Comment } from "./Comment";
 import { Note } from "./Note";
 
+import { CommentManager } from './CommentManager';
+
 
 export function activate(context: vscode.ExtensionContext) {
+
+	CommentManager.workspaceState = context.workspaceState;
+
 	// The command has been defined in the package.json file
 	// The commandId parameter must match the command field in package.json
 	const disposable = vscode.commands.registerCommand('carrot.helloWorld', () => {
