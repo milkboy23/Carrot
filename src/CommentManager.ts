@@ -25,7 +25,10 @@ export class CommentManager{
         this.workspaceState.update("comments", allComments);
     }        
 
+    // gets the comments of the current editor by filtering through all comments
     static getCommentsForEditor(editorUri: vscode.Uri) : SerializedComment[] {
-        return [];
+        const allComments = this.workspaceState.get<SerializedComment[]>("comments", []);
+        const editorComments = allComments.filter(c => c.editorUri === editorUri.toString());
+        return editorComments;
     }
 }
