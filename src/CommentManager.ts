@@ -4,7 +4,6 @@ import { SerializedComment } from './SerializedComment';
 export class CommentManager{
 
     static workspaceState : vscode.Memento;
-    static disposables : {dispose(): any;}[];
 
     static init(workspaceState: vscode.Memento){
         this.workspaceState = workspaceState;
