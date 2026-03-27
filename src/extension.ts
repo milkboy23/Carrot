@@ -17,6 +17,18 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
+	// check the workspace for active text editors 
+	vscode.workspace.onDidOpenTextDocument(doc => {
+		const editor = vscode.window.visibleTextEditors.find(active => active.document === doc);
+		if (editor) {
+			restoreCommentsForEditor(context, editor);
+		}
+	});
+
+	if (vscode.window.activeTextEditor) {
+		restoreCommentsForEditor(context, vscode.window.activeTextEditor);
+	};
+
 	// This provides the sidebar icon for Carrot extension
 	const sidebarProvider = new SidebarProvider(context.extensionUri);
 	context.subscriptions.push(
