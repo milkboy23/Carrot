@@ -6,9 +6,8 @@ export class CommentManager{
     static workspaceState : vscode.Memento;
     static disposables : {dispose(): any;}[];
 
-    static init(disposables : {dispose(): any;}[]){
-        this.disposables = disposables;
-        CommentManager.workspaceState.update("disposables", disposables);
+    static init(workspaceState: vscode.Memento){
+        this.workspaceState = workspaceState;
     }
     
     //adding a comment to the workspaceState by getting its primitive types and pushing to the comments array 
@@ -26,7 +25,7 @@ export class CommentManager{
         this.workspaceState.update("comments", allComments);
     }        
 
-    static getComments() : {dispose(): any;}[] | undefined {
-        return this.workspaceState.get("disposables");
+    static getCommentsForEditor(editorUri: vscode.Uri) : SerializedComment[] {
+        return [];
     }
 }

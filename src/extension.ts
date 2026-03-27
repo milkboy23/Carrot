@@ -8,18 +8,15 @@ import { CommentManager } from './CommentManager';
 
 export function activate(context: vscode.ExtensionContext) {
 
-	CommentManager.workspaceState = context.workspaceState;
+	CommentManager.init(context.workspaceState);
 
-	// The command has been defined in the package.json file
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('carrot.helloWorld', () => {
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from Carrot!');
+	//listen for changing the tab/file
+	vscode.window.onDidChangeActiveTextEditor(editor => {
+		if (editor) {
+			restoreCommentsForEditor(editor);
+		}
 	});
-
-
-
-
+	
 
 	// This provides the sidebar icon for Carrot extension
 	const sidebarProvider = new SidebarProvider(context.extensionUri);
@@ -51,6 +48,16 @@ export function activate(context: vscode.ExtensionContext) {
 	);
 
 	context.subscriptions.push(disposable);
+}
+
+function restoreCommentsForEditor(editor: vscode.TextEditor) {
+	const comments = CommentManager.getCommentsForEditor(editor.document.uri);
+
+	for(const comment of comments){
+		const decoration = {
+			hovermessage
+		}
+	}
 }
 
 // This method is called when your extension is deactivated
