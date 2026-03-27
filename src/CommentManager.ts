@@ -18,7 +18,7 @@ export class CommentManager{
             id: id,
             noteId: noteId,
             editorUri: editorUri.toString(),
-            start: start.character,
+            start: start.line,
             hoverMessage: hoverMessage
         });
 

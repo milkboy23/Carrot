@@ -61,6 +61,7 @@ function restoreCommentsForEditor(context: vscode.ExtensionContext, editor: vsco
 	// Define decoration type
 	const decorationType = Comment.createDecorationType(context);
 
+	const decorationOptions : vscode.DecorationOptions[] = [];
 	// looping through the comments - creating new decoration and setting it in the editor
 	for(const comment of comments){
 		const range = new vscode.Range(comment.start+1, 0, comment.start+1, 0);
@@ -69,8 +70,10 @@ function restoreCommentsForEditor(context: vscode.ExtensionContext, editor: vsco
 			range,
 			hoverMessage : comment.hoverMessage
 		};
-		editor.setDecorations(decorationType, [decoration]);
+
+		decorationOptions.push(decoration);
 	}
+	editor.setDecorations(decorationType, decorationOptions);
 }
 
 // This method is called when your extension is deactivated
