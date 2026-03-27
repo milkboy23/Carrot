@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { SerializedComment } from './SerializedComment';
 
 export class CommentManager{
 
@@ -9,12 +10,21 @@ export class CommentManager{
         this.disposables = disposables;
         CommentManager.workspaceState.update("disposables", disposables);
     }
+    
+    //adding a comment to the workspaceState by getting its primitive types and pushing to the comments array 
+    static addComment(id: number, noteId: number, editorUri: vscode.Uri, start: vscode.Position, hoverMessage: string){
+        const allComments = this.workspaceState.get<SerializedComment[]>("comments", []);
 
-    static addComment(comment){
-        let listOfDisp = this.getComments();
-        listOfDisp.push()
-        this.workspaceState.update();
-    }
+        allComments.push({
+            id: id,
+            noteId: noteId,
+            editorUri: editorUri.toString(),
+            start: start.character,
+            hoverMessage: hoverMessage
+        });
+
+        this.workspaceState.update("comments", allComments);
+    }        
 
     static getComments() : {dispose(): any;}[] | undefined {
         return this.workspaceState.get("disposables");
