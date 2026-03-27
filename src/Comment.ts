@@ -1,16 +1,10 @@
 import * as vscode from "vscode";
+import { CommentManager } from "./CommentManager";
 
 
 export class Comment{
-    private readonly id : number;
-    private readonly noteId : number;
 
-    constructor(id: number, noteId: number){
-        this.id = id;
-        this.noteId = noteId;
-    }
-
-    async createDecoration(editor: vscode.TextEditor | undefined, context: vscode.ExtensionContext) : Promise<boolean>{
+    static async createDecoration(editor: vscode.TextEditor | undefined, context: vscode.ExtensionContext, id: number, noteId: number) : Promise<boolean>{
         if(!editor){
             vscode.window.showWarningMessage("No editor in use");
             return false;
@@ -26,7 +20,6 @@ export class Comment{
             return false;
         }
 
-
         //Remove '//' from comment
         //TODO: iff (char is //) then replace it
         let firstslashremoved = comment.replace(comment.charAt(0), "");
@@ -39,8 +32,21 @@ export class Comment{
         if(!removed){
             vscode.window.showErrorMessage("IDK bro seems weird");
         }
+        
+        // Create decoration
+        const decoration = {range: new vscode.Range(start.line+1, 0, start.line+1, 0), hoverMessage: textFromComment};
+        const decorationType = this.createDecorationType(context);
 
+        editor.setDecorations(decorationType, [decoration]);
+        
+        // Add the new comment to the comment manager
+        CommentManager.addComment(id, noteId, editor.document.uri, start, textFromComment);
 
+        return true;
+    }
+
+    static createDecorationType(context: vscode.ExtensionContext) : vscode.TextEditorDecorationType {
+        
         //1. Get decoration image path
         const decoPath = vscode.Uri.joinPath(context.extensionUri, "media", "images", "carrot-decoration.svg"); 
 
@@ -50,14 +56,7 @@ export class Comment{
             gutterIconSize : "contain",
             isWholeLine : true
         });
-        
-        //Create empty deco options
-        const decorationOptions : vscode.DecorationOptions[] = [];
-        const decoration = {range: new vscode.Range(start.line+1, 0, start.line+1, 0), hoverMessage: textFromComment};
-        decorationOptions.push(decoration);
 
-        editor.setDecorations(decorationType, decorationOptions);
-
-        return true;
-    }
+        return decorationType;
+    } 
 }
