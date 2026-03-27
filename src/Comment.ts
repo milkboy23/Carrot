@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { CommentManager } from "./CommentManager";
 
 
 export class Comment{
@@ -26,7 +27,6 @@ export class Comment{
             return false;
         }
 
-
         //Remove '//' from comment
         //TODO: iff (char is //) then replace it
         let firstslashremoved = comment.replace(comment.charAt(0), "");
@@ -39,7 +39,6 @@ export class Comment{
         if(!removed){
             vscode.window.showErrorMessage("IDK bro seems weird");
         }
-
 
         //1. Get decoration image path
         const decoPath = vscode.Uri.joinPath(context.extensionUri, "media", "images", "carrot-decoration.svg"); 
@@ -57,6 +56,8 @@ export class Comment{
         decorationOptions.push(decoration);
 
         editor.setDecorations(decorationType, decorationOptions);
+        
+        CommentManager.addComment(this.id, this.noteId, editor.document.uri, start, textFromComment);
 
         return true;
     }

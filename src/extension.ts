@@ -38,16 +38,14 @@ export function activate(context: vscode.ExtensionContext) {
 		));
 	
 	// Creates a new Carrot comment (pop-up)
-	context.subscriptions.push(
+
 		vscode.commands.registerCommand('carrot.createCarrot', async () => {
 			const comment = new Comment(1, 1);
 			const created = comment.createDecoration(vscode.window.activeTextEditor, context);
 			if(!created){ 
 				vscode.window.showErrorMessage("Unable to create decoration sucks to suck");
 			}
-
-		})
-	);
+		});
 
 	// Create a new full-page Carrot note
 	context.subscriptions.push(
