@@ -40,8 +40,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// Creates a new Carrot comment (pop-up)
 
 		vscode.commands.registerCommand('carrot.createCarrot', async () => {
-			const comment = new Comment(1, 1);
-			const created = comment.createDecoration(vscode.window.activeTextEditor, context);
+			const created = Comment.createDecoration(vscode.window.activeTextEditor, context, 1, 1);
 			if(!created){ 
 				vscode.window.showErrorMessage("Unable to create decoration sucks to suck");
 			}
@@ -58,15 +57,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 function restoreCommentsForEditor(context: vscode.ExtensionContext, editor: vscode.TextEditor) {
 	const comments = CommentManager.getCommentsForEditor(editor.document.uri);
-	// 1. Get decoration image path
-	const decoPath = vscode.Uri.joinPath(context.extensionUri, "media", "images", "carrot-decoration.svg"); 
 	
-	// 2. Define decoration type
-	const decorationType = vscode.window.createTextEditorDecorationType({
-		gutterIconPath : decoPath,
-		gutterIconSize : "contain",
-		isWholeLine : true
-	});
+	// Define decoration type
+	const decorationType = Comment.createDecorationType(context);
 
 	// looping through the comments - creating new decoration and setting it in the editor
 	for(const comment of comments){
