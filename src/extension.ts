@@ -39,12 +39,23 @@ export function activate(context: vscode.ExtensionContext) {
 	
 	// Creates a new Carrot comment (pop-up)
 
-		vscode.commands.registerCommand('carrot.createCarrot', async () => {
-			const created = Comment.createDecoration(vscode.window.activeTextEditor, context, 1, 1);
-			if(!created){ 
-				vscode.window.showErrorMessage("Unable to create decoration sucks to suck");
-			}
-		});
+	vscode.commands.registerCommand('carrot.createCarrot', async () => {
+		const created = Comment.createDecoration(vscode.window.activeTextEditor, context, 1, 1);
+		if(!created) { 
+			vscode.window.showErrorMessage("Unable to create decoration sucks to suck");
+		}
+	});
+
+	vscode.commands.registerCommand('carrot.deleteCarrot', async () => {
+		const deleted = Comment.deleteDecoration(vscode.window.activeTextEditor, context);
+		if(!deleted) { 
+			vscode.window.showErrorMessage("Unable to create decoration sucks to suck");
+		}
+		if (vscode.window.activeTextEditor) {
+				restoreCommentsForEditor(context, vscode.window.activeTextEditor);
+		};
+	});
+
 
 	// Create a new full-page Carrot note
 	context.subscriptions.push(
@@ -64,7 +75,7 @@ function restoreCommentsForEditor(context: vscode.ExtensionContext, editor: vsco
 	const decorationOptions : vscode.DecorationOptions[] = [];
 	// looping through the comments - creating new decoration and setting it in the editor
 	for(const comment of comments){
-		const range = new vscode.Range(comment.start+1, 0, comment.start+1, 0);
+		const range = new vscode.Range(comment.start, 0, comment.start, 0);
 
 		const decoration = {
 			range,
