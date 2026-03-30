@@ -36,10 +36,6 @@
     },
     "commands": [
       {
-        "command": "carrot.helloWorld",
-        "title": "Carrot"
-      },
-      {
         "command": "carrot.createCarrot",
         "category": "Carrot",
         "title": "Create New Carrot Comment"
