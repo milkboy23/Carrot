@@ -40,14 +40,14 @@ export function activate(context: vscode.ExtensionContext) {
 	// Creates a new Carrot comment (pop-up)
 
 	vscode.commands.registerCommand('carrot.createCarrot', async () => {
-		const created = Comment.createDecoration(vscode.window.activeTextEditor, context, 1, 1);
+		const created = await Comment.createDecoration(vscode.window.activeTextEditor, context, 1, 1);
 		if(!created) { 
 			vscode.window.showErrorMessage("Unable to create decoration sucks to suck");
 		}
 	});
 
 	vscode.commands.registerCommand('carrot.deleteCarrot', async () => {
-		const deleted = Comment.deleteDecoration(vscode.window.activeTextEditor, context);
+		const deleted = await Comment.deleteDecoration(vscode.window.activeTextEditor, context);
 		if(!deleted) { 
 			vscode.window.showErrorMessage("Unable to create decoration sucks to suck");
 		}
