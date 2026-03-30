@@ -47,13 +47,11 @@ export class CommentManager{
         // Nested for loop: for each comment to delete, we compare it to all the old comments
         for (const commentToDelete of commentsToDelete) {
             for(const comment of allComments){
-                if (commentToDelete === comment) {
-                    allComments.pop()
-                }
-                else {
-                    newCommentList.push(comment)
+                if (commentToDelete.start !== comment.start || commentToDelete.editorUri !== comment.editorUri ) {
+                    newCommentList.push(comment);
                 }
              }
         }
+        CommentManager.workspaceState.update("comments", newCommentList);
     }
 }

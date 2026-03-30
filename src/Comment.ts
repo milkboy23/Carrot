@@ -72,7 +72,7 @@ export class Comment{
         const selection = editor.selection;
         const start = selection.start;
 
-        const commentsToDelete = CommentManager.getCommentsForLocation(context.extensionUri, start);
+        const commentsToDelete = CommentManager.getCommentsForLocation(editor.document.uri, start);
 
         CommentManager.deleteComments(commentsToDelete);
 
