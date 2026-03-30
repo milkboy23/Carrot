@@ -52,6 +52,6 @@ export class CommentManager{
                 }
              }
         }
-        CommentManager.workspaceState.update("comments", newCommentList);
+        this.workspaceState.update("comments", newCommentList);
     }
 }
