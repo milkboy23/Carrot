@@ -35,14 +35,8 @@ export class Comment{
             vscode.window.showErrorMessage("IDK bro seems weird");
         }
         
-        // Create decoration
-        const decoration = {range: new vscode.Range(decorationLine, 0, decorationLine, 0), hoverMessage: markdownComment};
-        const decorationType = this.createDecorationType(context);
-
-        editor.setDecorations(decorationType, [decoration]);
-        
         // Add the new comment to the comment manager
-        CommentManager.addComment(id, noteId, editor.document.uri, decorationLine, textFromComment);
+        await CommentManager.addComment(id, noteId, editor.document.uri, decorationLine, textFromComment);
 
         return true;
     }
@@ -74,7 +68,7 @@ export class Comment{
 
         const commentsToDelete = CommentManager.getCommentsForLocation(editor.document.uri, start);
 
-        CommentManager.deleteComments(commentsToDelete);
+        await CommentManager.deleteComments(commentsToDelete);
 
         return true;
     }

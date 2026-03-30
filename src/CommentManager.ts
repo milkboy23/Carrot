@@ -39,7 +39,7 @@ export class CommentManager{
         return positionComments;
     }
 
-    static deleteComments(commentsToDelete: SerializedComment[]) {
+    static async deleteComments(commentsToDelete: SerializedComment[]) {
         // New list for comments NOT to be deleted
         const newCommentList: SerializedComment[] = [];
         // Get all the old comments
@@ -47,11 +47,14 @@ export class CommentManager{
         // Nested for loop: for each comment to delete, we compare it to all the old comments
         for (const commentToDelete of commentsToDelete) {
             for(const comment of allComments){
-                if (commentToDelete.start !== comment.start || commentToDelete.editorUri !== comment.editorUri ) {
+                if (
+                    commentToDelete.start !== comment.start || 
+                    commentToDelete.editorUri !== comment.editorUri ) 
+                    {
                     newCommentList.push(comment);
                 }
              }
         }
-        this.workspaceState.update("comments", newCommentList);
+        await this.workspaceState.update("comments", newCommentList);
     }
 }
