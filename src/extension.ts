@@ -5,10 +5,14 @@ import { Note } from "./Note";
 
 import { CommentManager } from './CommentManager';
 
+let carrotDecorationType: vscode.TextEditorDecorationType;
 
 export function activate(context: vscode.ExtensionContext) {
 
 	CommentManager.init(context.workspaceState);
+
+	carrotDecorationType = Comment.createDecorationType(context);
+	context.subscriptions.push(carrotDecorationType);
 
 	// listen for changing the tab/file
 	vscode.window.onDidChangeActiveTextEditor(editor => {
@@ -39,12 +43,26 @@ export function activate(context: vscode.ExtensionContext) {
 	
 	// Creates a new Carrot comment (pop-up)
 
-		vscode.commands.registerCommand('carrot.createCarrot', async () => {
-			const created = Comment.createDecoration(vscode.window.activeTextEditor, context, 1, 1);
-			if(!created){ 
-				vscode.window.showErrorMessage("Unable to create decoration sucks to suck");
-			}
-		});
+	vscode.commands.registerCommand('carrot.createCarrot', async () => {
+		const created = await Comment.createDecoration(vscode.window.activeTextEditor, context, 1, 1);
+		if(!created) { 
+			vscode.window.showErrorMessage("Unable to create decoration sucks to suck");
+		}
+		if (vscode.window.activeTextEditor) {
+				restoreCommentsForEditor(context, vscode.window.activeTextEditor);
+		}
+	});
+
+	vscode.commands.registerCommand('carrot.deleteCarrot', async () => {
+		const deleted = await Comment.deleteDecoration(vscode.window.activeTextEditor, context);
+		if(!deleted) { 
+			vscode.window.showErrorMessage("Unable to create decoration sucks to suck");
+		}
+		if (vscode.window.activeTextEditor) {
+				restoreCommentsForEditor(context, vscode.window.activeTextEditor);
+		}
+	});
+
 
 	// Create a new full-page Carrot note
 	context.subscriptions.push(
@@ -58,22 +76,12 @@ export function activate(context: vscode.ExtensionContext) {
 function restoreCommentsForEditor(context: vscode.ExtensionContext, editor: vscode.TextEditor) {
 	const comments = CommentManager.getCommentsForEditor(editor.document.uri);
 	
-	// Define decoration type
-	const decorationType = Comment.createDecorationType(context);
+	const decorationOptions: vscode.DecorationOptions[] = comments.map(comment => ({
+		range: new vscode.Range(comment.start, 0, comment.start, 0),
+		hoverMessage: comment.hoverMessage
+	}));
 
-	const decorationOptions : vscode.DecorationOptions[] = [];
-	// looping through the comments - creating new decoration and setting it in the editor
-	for(const comment of comments){
-		const range = new vscode.Range(comment.start+1, 0, comment.start+1, 0);
-
-		const decoration = {
-			range,
-			hoverMessage : comment.hoverMessage
-		};
-
-		decorationOptions.push(decoration);
-	}
-	editor.setDecorations(decorationType, decorationOptions);
+	editor.setDecorations(carrotDecorationType, decorationOptions);
 }
 
 // This method is called when your extension is deactivated

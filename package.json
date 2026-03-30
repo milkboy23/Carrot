@@ -36,13 +36,14 @@
     },
     "commands": [
       {
-        "command": "carrot.helloWorld",
-        "title": "Carrot"
-      },
-      {
         "command": "carrot.createCarrot",
         "category": "Carrot",
         "title": "Create New Carrot Comment"
+      },
+      {
+        "command": "carrot.deleteCarrot",
+        "category": "Carrot",
+        "title": "Delete Selected Carrot Comment"
       },
       {
         "command": "carrot.note",
@@ -55,6 +56,12 @@
         "command": "carrot.createCarrot",
         "key": "ctrl+alt+c",
         "mac": "cmd+alt+c",
+        "when": "editor.hasSelection"
+      },
+      {
+        "command": "carrot.deleteCarrot",
+        "key": "ctrl+alt+d",
+        "mac": "cmd+alt+d",
         "when": "editor.hasSelection"
       }
     ]
