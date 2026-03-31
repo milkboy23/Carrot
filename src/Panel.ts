@@ -1,24 +1,22 @@
 import * as vscode from 'vscode';
 import { NoteManager } from './NoteManager';
 import { getNonce } from './getNonce';
+import { Note } from './Note';
 
 export class Panel {
-    private readonly id : number;
-    private readonly commentId : number;
     public static currentPanel: Panel | undefined;
     public static readonly viewType = 'carrotNote';
 
     private readonly _panel: vscode.WebviewPanel;
     private readonly _extensionUri: vscode.Uri;
     private _disposables: vscode.Disposable[] = [];
+	private noteId: number;
 
-    constructor(id: number, commentId: number, panel: vscode.WebviewPanel, extensionUri: vscode.Uri){
-        this.id = id;
-        this.commentId = commentId;
+    constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri, noteId: number){
         this._panel = panel;
         this._extensionUri = extensionUri;
+		this.noteId = noteId;
 
-        
         this._update();
 
 		// Listen for when the panel is disposed
@@ -45,14 +43,13 @@ export class Panel {
 						return;
 					
 					case 'saveNote':
-						NoteManager.saveNote(this.id, this._extensionUri, message.html || "abc");
+						NoteManager.saveNote(this.noteId, this._extensionUri, message.html);
 						return;
 				}
 			},
 			null,
 			this._disposables
 		);
-
 	}
 
 	public doRefactor() {
@@ -76,22 +73,24 @@ export class Panel {
 	
     }
 
-    public static createOrShow(extensionUri: vscode.Uri, noteId?: number) {
+    public static createOrShow(extensionUri: vscode.Uri, noteId: number) {
+		
         // Creates a column based on the text editor. Checks for null.
         const column = vscode.window.activeTextEditor
 			? vscode.window.activeTextEditor.viewColumn
 			: undefined;
 
         // If we already made a panel, show it, because we are limited to one panel.
-        if (Panel.currentPanel) {
-            Panel.currentPanel._panel.reveal(column);
-            return;
-        }
+        // if (Panel.currentPanel) {
+        //     Panel.currentPanel._panel.reveal(column);
+        //     return;
+        // }
+		// If we already made a panel, update the content
 
         // otherwise, create new panel.
         const panel = vscode.window.createWebviewPanel(
             Panel.viewType, // Identifies the type of the webview. 
-            'New Carrot Note', // Title of the panel displayed to the user
+            'Carrot Note', // Title of the panel displayed to the user
             column || vscode.ViewColumn.One, // Editor column to show the new webview panel in.
             {
                 enableScripts: true,
@@ -100,21 +99,17 @@ export class Panel {
         );
         
         // Set the panel.
-        Panel.currentPanel = new Panel(noteId || 1, 1, panel, extensionUri);
+        Panel.currentPanel = new Panel(panel, extensionUri, noteId);
     }
-
-    public static revive(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
-		Panel.currentPanel = new Panel(1, 1, panel, extensionUri);
-	}
 
     private _update(){
         const webview = this._panel.webview;
 
-        this._panel.title = "New Carrot Note";
+        this._panel.title = "Carrot Note";
 		this._panel.webview.html = this._getHtmlForWebview(webview);
 
         // Load the note content
-        const noteHtml = NoteManager.loadNote(this.id);
+        const noteHtml = NoteManager.loadNote(this.noteId);
         if (noteHtml) {
             this._panel.webview.postMessage({ command: 'loadNote', html: noteHtml });
         }
