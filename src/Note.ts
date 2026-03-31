@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { NoteManager } from './NoteManager';
 import { getNonce } from './getNonce';
 
 export class Note {
@@ -42,11 +43,15 @@ export class Note {
 					case 'alert':
 						vscode.window.showErrorMessage(message.text);
 						return;
+					
+					case 'saveNote':
+						NoteManager.saveNote(1, extensionUri, "abc");
 				}
 			},
 			null,
 			this._disposables
 		);
+
 	}
 
 	public doRefactor() {

@@ -18,3 +18,9 @@ editor.events.on('change', () => {
         text: editor.value
     });
 });
+
+const html = editor.value;
+vscode.postMessage({
+    command: "saveNote",
+    html: html
+});

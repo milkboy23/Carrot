@@ -45,7 +45,6 @@ export function activate(context: vscode.ExtensionContext) {
 		));
 	
 	// Creates a new Carrot comment (pop-up)
-
 	vscode.commands.registerCommand('carrot.createCarrot', async () => {
 		const created = await Comment.createComment(context.extensionUri, vscode.window.activeTextEditor, 1, 1);
 		if(!created) { 
