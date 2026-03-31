@@ -9,6 +9,9 @@ let carrotDecorationType: vscode.TextEditorDecorationType;
 
 export function activate(context: vscode.ExtensionContext) {
 
+	// to store carrot notes
+	vscode.workspace.fs.createDirectory(context.extensionUri);
+
 	CommentManager.init(context.workspaceState);
 
 	carrotDecorationType = Comment.createDecorationType(context);
@@ -63,14 +66,11 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-
 	// Create a new full-page Carrot note
-	context.subscriptions.push(
-		vscode.commands.registerCommand('carrot.note', () => {
-			// const note = new Note(1, 1); //EF core come in a clutch	
-			Note.createOrShow(context.extensionUri);
-		})
-	);
+	vscode.commands.registerCommand('carrot.note', () => {
+		// const note = new Note(1, 1); //EF core come in a clutch	
+		Note.createOrShow(context.extensionUri);
+	});
 }
 
 function restoreCommentsForEditor(context: vscode.ExtensionContext, editor: vscode.TextEditor) {
