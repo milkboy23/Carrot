@@ -35,8 +35,6 @@ export class Comment{
         //TODO: iff (char is //) then replace it
         let firstslashremoved = comment.replace(comment.charAt(0), "");
         let textFromComment = firstslashremoved.replace(firstslashremoved.charAt(0), "");
-        let markdownComment = new vscode.MarkdownString(textFromComment + '[Open note](command:carrot.openNote)'); // what to link to
-        markdownComment.isTrusted = true;
 
         //Removes highlighted text
         const removed = await editor.edit(editBuilder => {
@@ -47,7 +45,7 @@ export class Comment{
         }
         
         // Add the new comment to the comment manager
-        await CommentManager.addComment(id, noteId, editor.document.uri, decorationLine, markdownComment);
+        await CommentManager.addComment(id, noteId, editor.document.uri, decorationLine, textFromComment);
 
         return true;
     }

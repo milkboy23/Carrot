@@ -84,11 +84,18 @@ export function activate(context: vscode.ExtensionContext) {
 
 function restoreCommentsForEditor(context: vscode.ExtensionContext, editor: vscode.TextEditor) {
 	const comments = CommentManager.getCommentsForEditor(editor.document.uri);
+	let markdownComment: vscode.MarkdownString = new vscode.MarkdownString("");
 
-	const decorationOptions: vscode.DecorationOptions[] = comments.map(comment => ({
-		range: new vscode.Range(comment.start, 0, comment.start, 0),
-		hoverMessage: comment.hoverMessage
-	}));
+	const decorationOptions: vscode.DecorationOptions[] = []
+	
+	for (const comment of comments) {
+		markdownComment = new vscode.MarkdownString(comment.hoverMessage + '[Open note](command:carrot.openNote)'); // what to link to
+        markdownComment.isTrusted = true;
+		decorationOptions.push({
+			range: new vscode.Range(comment.start, 0, comment.start, 0),
+			hoverMessage: markdownComment
+		});
+	}
 
 	editor.setDecorations(carrotDecorationType, decorationOptions);
 }
