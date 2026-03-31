@@ -1,21 +1,22 @@
 import * as vscode from "vscode";
 import { CommentManager } from "./CommentManager";
-
+import { Note } from "./Note";
 
 export class Comment{
 
     
 
-    static async createComment (editor: vscode.TextEditor | undefined, id: number, noteId: number) : Promise<boolean>{
+    static async createComment (extensionUri: vscode.Uri, editor: vscode.TextEditor | undefined, id: number, noteId: number) : Promise<boolean>{
         
-        return await this.createDecoration(editor, id, noteId);
+        return await this.createDecoration(extensionUri, editor, id, noteId);
     }
 
-    static async createCommentAndNote (editor: vscode.TextEditor | undefined, id: number, noteId: number) : Promise<boolean> {
-        return await this.createDecoration(editor, id, noteId);
+    static async createCommentAndNote (extensionUri: vscode.Uri, editor: vscode.TextEditor | undefined, id: number, noteId: number) : Promise<boolean> {
+        
+        return await this.createDecoration(extensionUri, editor, id, noteId);
     }
 
-    static async createDecoration(editor: vscode.TextEditor | undefined, id: number, noteId: number) : Promise<boolean>{
+    static async createDecoration(extensionUri: vscode.Uri, editor: vscode.TextEditor | undefined, id: number, noteId: number) : Promise<boolean>{
         if(!editor){
             vscode.window.showWarningMessage("No editor in use");
             return false;
@@ -36,7 +37,7 @@ export class Comment{
         //TODO: iff (char is //) then replace it
         let firstslashremoved = comment.replace(comment.charAt(0), "");
         let textFromComment = firstslashremoved.replace(firstslashremoved.charAt(0), "");
-        let markdownComment = new vscode.MarkdownString(textFromComment + " [note](https://code.visualstudio.com/api/ux-guidelines/overview#containers)") // what to link to
+        let markdownComment = new vscode.MarkdownString(textFromComment + '[note](${Note.createOrShow(extensionUri)})'); // what to link to
 
         //Removes highlighted text
         const removed = await editor.edit(editBuilder => {

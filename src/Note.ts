@@ -70,7 +70,6 @@ export class Note {
 	
     }
 
-
     public static createOrShow(extensionUri: vscode.Uri) {
         // Creates a column based on the text editor. Checks for null.
         const column = vscode.window.activeTextEditor
