@@ -6,6 +6,6 @@ export interface SerializedComment{
     noteId: number;
     editorUri: string;
     start: number;
-    hoverMessage: string;
+    hoverMessage: vscode.MarkdownString;
 
 }

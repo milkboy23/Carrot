@@ -76,11 +76,15 @@ export function activate(context: vscode.ExtensionContext) {
 				restoreCommentsForEditor(context, vscode.window.activeTextEditor);
 		}
 	});
+	
+	vscode.commands.registerCommand('carrot.openNote',() => {
+		Note.createOrShow(context.extensionUri);
+	});
 }
 
 function restoreCommentsForEditor(context: vscode.ExtensionContext, editor: vscode.TextEditor) {
 	const comments = CommentManager.getCommentsForEditor(editor.document.uri);
-	
+
 	const decorationOptions: vscode.DecorationOptions[] = comments.map(comment => ({
 		range: new vscode.Range(comment.start, 0, comment.start, 0),
 		hoverMessage: comment.hoverMessage

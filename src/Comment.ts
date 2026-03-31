@@ -4,15 +4,13 @@ import { Note } from "./Note";
 
 export class Comment{
 
-    
-
     static async createComment (extensionUri: vscode.Uri, editor: vscode.TextEditor | undefined, id: number, noteId: number) : Promise<boolean>{
         
         return await this.createDecoration(extensionUri, editor, id, noteId);
     }
 
     static async createCommentAndNote (extensionUri: vscode.Uri, editor: vscode.TextEditor | undefined, id: number, noteId: number) : Promise<boolean> {
-        
+
         return await this.createDecoration(extensionUri, editor, id, noteId);
     }
 
@@ -37,7 +35,8 @@ export class Comment{
         //TODO: iff (char is //) then replace it
         let firstslashremoved = comment.replace(comment.charAt(0), "");
         let textFromComment = firstslashremoved.replace(firstslashremoved.charAt(0), "");
-        let markdownComment = new vscode.MarkdownString(textFromComment + '[note](${Note.createOrShow(extensionUri)})'); // what to link to
+        let markdownComment = new vscode.MarkdownString(textFromComment + '[Open note](command:carrot.openNote)'); // what to link to
+        markdownComment.isTrusted = true;
 
         //Removes highlighted text
         const removed = await editor.edit(editBuilder => {
@@ -48,7 +47,7 @@ export class Comment{
         }
         
         // Add the new comment to the comment manager
-        await CommentManager.addComment(id, noteId, editor.document.uri, decorationLine, textFromComment);
+        await CommentManager.addComment(id, noteId, editor.document.uri, decorationLine, markdownComment);
 
         return true;
     }

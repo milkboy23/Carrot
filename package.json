@@ -49,6 +49,11 @@
         "command": "carrot.commentAndNote",
         "category": "Carrot",
         "title": "Create new Carrot Comment with Note"
+      },
+      {
+        "command": "carrot.openNote",
+        "category": "Carrot",
+        "title": "Open Carrot Note"
       }
     ],
     "keybindings": [
