@@ -12,13 +12,24 @@ editor.value = '<p>start typing...</p>';
 
 // Optional: Communicate with the Extension Host
 const vscode = (window as any).acquireVsCodeApi();
-editor.events.on('change', () => {
-    vscode.postMessage({
-        command: 'contentChanged',
-        text: editor.value
-    });
+// editor.events.on('change', () => {
+//     vscode.postMessage({
+//         command: 'contentChanged',
+//         text: editor.value
+//     });
+// });
+
+// Listen for messages from extension
+window.addEventListener('message', event => {
+    const message = event.data;
+    switch (message.command) {
+        case 'loadNote':
+            editor.value = message.html;
+            break;
+    }
 });
 
+// Send a message with the new html content when the user wants to save their progress
 const html = editor.value;
 vscode.postMessage({
     command: "saveNote",

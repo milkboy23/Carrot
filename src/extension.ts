@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { SidebarProvider } from "./sidebarProvider";
 import { Comment } from "./Comment";
-import { Note } from "./Note";
+import { Panel } from "./Panel";
 
 import { CommentManager } from './CommentManager';
 
@@ -65,7 +65,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-	// Create a new full-page Carrot note
+	// Create a new carrot comment with a full-page Carrot note attached
 	vscode.commands.registerCommand('carrot.commentAndNote', async () => {
 		const created = await Comment.createCommentAndNote(context.extensionUri, vscode.window.activeTextEditor, 1, 1);
 		if(!created) { 
@@ -76,11 +76,16 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 	
-	vscode.commands.registerCommand('carrot.openNote',() => {
-		Note.createOrShow(context.extensionUri);
+	// Open the Carrot note associated with a comment when the command is executed
+	vscode.commands.registerCommand('carrot.openNote', (args) => {
+		const noteId = args && args[0] && args[0].noteId;
+		Panel.createOrShow(context.extensionUri, noteId);
 	});
 }
 
+/**
+ * Rendering comments with a markdown hyperlink.
+ */
 function restoreCommentsForEditor(context: vscode.ExtensionContext, editor: vscode.TextEditor) {
 	const comments = CommentManager.getCommentsForEditor(editor.document.uri);
 	let markdownComment: vscode.MarkdownString = new vscode.MarkdownString("");
@@ -88,8 +93,15 @@ function restoreCommentsForEditor(context: vscode.ExtensionContext, editor: vsco
 	const decorationOptions: vscode.DecorationOptions[] = []
 	
 	for (const comment of comments) {
-		markdownComment = new vscode.MarkdownString(comment.hoverMessage + '[Open note](command:carrot.openNote)'); // what to link to
+		// Choose the arguments to pass to the method call
+		const args = [{ noteId: comment.noteId }];
+		// create the command with args and stringify
+		const openNoteCommand = `command:carrot.openNote?${encodeURIComponent(JSON.stringify(args))}`;
+		// Build the markdown hovermessage with text and the new command
+		markdownComment = new vscode.MarkdownString(comment.hoverMessage + `[Open note](${openNoteCommand})`);
+		// Set is trusted to allow the vscode hover message to show this markdown string
         markdownComment.isTrusted = true;
+		// Add each fully buildt comment to the list of decorations for this document
 		decorationOptions.push({
 			range: new vscode.Range(comment.start, 0, comment.start, 0),
 			hoverMessage: markdownComment

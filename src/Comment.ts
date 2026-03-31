@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { CommentManager } from "./CommentManager";
-import { Note } from "./Note";
+import { Panel } from "./Panel";
 
 export class Comment{
 
@@ -20,6 +20,7 @@ export class Comment{
             return false;
         }
 
+        
         //Get highlighted text
         const selection = editor.selection;
         const start = selection.start;
