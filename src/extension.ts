@@ -47,7 +47,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// Creates a new Carrot comment (pop-up)
 
 	vscode.commands.registerCommand('carrot.createCarrot', async () => {
-		const created = await Comment.createDecoration(vscode.window.activeTextEditor, context, 1, 1);
+		const created = await Comment.createComment(vscode.window.activeTextEditor, 1, 1);
 		if(!created) { 
 			vscode.window.showErrorMessage("Unable to create decoration sucks to suck");
 		}
@@ -67,9 +67,9 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	// Create a new full-page Carrot note
-	vscode.commands.registerCommand('carrot.note', () => {
+	vscode.commands.registerCommand('carrot.commentAndNote', () => {
 		// const note = new Note(1, 1); //EF core come in a clutch	
-		Note.createOrShow(context.extensionUri);
+		Comment.createCommentAndNote(vscode.window.activeTextEditor, 1, 1);
 	});
 }
 

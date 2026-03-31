@@ -4,7 +4,18 @@ import { CommentManager } from "./CommentManager";
 
 export class Comment{
 
-    static async createDecoration(editor: vscode.TextEditor | undefined, context: vscode.ExtensionContext, id: number, noteId: number) : Promise<boolean>{
+    
+
+    static async createComment (editor: vscode.TextEditor | undefined, id: number, noteId: number) : Promise<boolean>{
+        
+        return await this.createDecoration(editor, id, noteId);
+    }
+
+    static async createCommentAndNote (editor: vscode.TextEditor | undefined, id: number, noteId: number) : Promise<boolean> {
+        return await this.createDecoration(editor, id, noteId);
+    }
+
+    static async createDecoration(editor: vscode.TextEditor | undefined, id: number, noteId: number) : Promise<boolean>{
         if(!editor){
             vscode.window.showWarningMessage("No editor in use");
             return false;
