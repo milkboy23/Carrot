@@ -4,6 +4,7 @@ import { Comment } from "./Comment";
 import { Panel } from "./Panel";
 
 import { CommentManager } from './CommentManager';
+import { NoteManager } from './NoteManager';
 
 let carrotDecorationType: vscode.TextEditorDecorationType;
 
@@ -13,6 +14,7 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.workspace.fs.createDirectory(context.extensionUri);
 
 	CommentManager.init(context.workspaceState);
+	NoteManager.init(context.workspaceState);
 
 	carrotDecorationType = Comment.createDecorationType(context);
 	context.subscriptions.push(carrotDecorationType);

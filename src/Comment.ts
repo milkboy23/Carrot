@@ -1,6 +1,8 @@
 import * as vscode from "vscode";
 import { CommentManager } from "./CommentManager";
 import { Panel } from "./Panel";
+import { Note } from "./Note";
+import { NoteManager } from "./NoteManager";
 
 export class Comment{
 
@@ -45,6 +47,8 @@ export class Comment{
             vscode.window.showErrorMessage("IDK bro seems weird");
         }
         
+        // Create a serialized note for the comment
+        await NoteManager.addNote(noteId, editor.document.uri, textFromComment);
         // Add the new comment to the comment manager
         await CommentManager.addComment(id, noteId, editor.document.uri, decorationLine, textFromComment);
 

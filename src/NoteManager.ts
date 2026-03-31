@@ -9,6 +9,19 @@ export class NoteManager{
         this.workspaceState = workspaceState;
     }
 
+
+    static addNote(id: number, editorUri: vscode.Uri, hoverMessage: string){
+        const allNotes = this.workspaceState.get<SerializedNote[]>("notes", []);
+
+        allNotes.push({
+            id: id,
+            docUri: editorUri.toString(),
+            html: hoverMessage
+        });
+
+        this.workspaceState.update("notes", allNotes);
+    }
+
     /**
      * Save an existing Carrot Note with new html content
      */
