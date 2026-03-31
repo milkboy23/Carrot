@@ -26,8 +26,6 @@ This extension contributes the following settings:
 
 ## Known Issues
 
-The Carrot Comments can only be removed by disabling the extension
-
 ## Release Notes
 
 ### 1.0.0
