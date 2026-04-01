@@ -6,13 +6,12 @@ import { NoteManager } from './NoteManager';
 export class CommentManager{
 
     private workspaceState : vscode.Memento;
-    private nextId: number;
 
     private static instance: CommentManager;
 
     private constructor(workspaceState: vscode.Memento){
         this.workspaceState = workspaceState;
-        this.nextId = 0;
+        this.workspaceState.get<number>("nextCommentId", 0);
         console.log("NoteManager instance created!");
     }
 
@@ -27,16 +26,18 @@ export class CommentManager{
     public async addComment(noteId: number, editorUri: vscode.Uri, start: number, hoverMessage: string){
         const allComments = this.workspaceState.get<SerializedComment[]>("comments", []);
 
+        const id = this.workspaceState.get<number>("nextCommentId", 0);
+
         allComments.push({
-            id: this.nextId,
+            id: id,
             noteId: noteId,
             editorUri: editorUri.toString(),
             start: start,
             hoverMessage: hoverMessage
         });
-
+        const nextId = id + 1;  
+        await this.workspaceState.update("nextCommentId", nextId);
         await this.workspaceState.update("comments", allComments);
-        this.nextId++;
     }        
 
     // gets the comments of the current editor by filtering through all comments

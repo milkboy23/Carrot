@@ -6,13 +6,11 @@ export class NoteManager {
 
     private workspaceState : vscode.Memento;
 
-    private nextId: number;
-
     private static instance: NoteManager;
 
     private constructor(workspaceState: vscode.Memento){
         this.workspaceState = workspaceState;
-        this.nextId = 0;
+        this.workspaceState.get<number>("nextNoteId", 0);
         console.log("NoteManager instance created!");
     }
 
@@ -26,14 +24,17 @@ export class NoteManager {
     public async addNote(editorUri: vscode.Uri, hoverMessage: string) : Promise<number> {
         const allNotes = this.workspaceState.get<SerializedNote[]>("notes", []);
 
-        const id = this.nextId
+        const id = this.workspaceState.get<number>("nextNoteId", 0);
         allNotes.push({
             id: id,
             docUri: editorUri.toString(),
             html: hoverMessage
         });
 
-        this.nextId++;
+        const nextId = id + 1; 
+
+        await this.workspaceState.update("nextNoteId", nextId);
+
         await this.workspaceState.update("notes", allNotes);
 
         return id;
