@@ -10,15 +10,6 @@ const editor = Jodit.make('#editor', {
 // Set initial value
 editor.value = '<p>start typing...</p>';
 
-// Optional: Communicate with the Extension Host
-const vscode = (window as any).acquireVsCodeApi();
- editor.events.on('change', () => {
-     vscode.postMessage({
-         command: 'contentChanged',
-         text: editor.value
-     });
- });
-
 // Listen for messages from extension
 window.addEventListener('message', event => {
     const message = event.data;
@@ -28,6 +19,17 @@ window.addEventListener('message', event => {
             break;
     }
 });
+
+// Optional: Communicate with the Extension Host
+const vscode = (window as any).acquireVsCodeApi();
+ editor.events.on('change', () => {
+     vscode.postMessage({
+         command: 'contentChanged',
+         html: editor.value
+     });
+ });
+
+vscode.postMessage({ command: 'webviewReady' });
 
 //TODO: How do we post a msg to the extension
 // Send a message with the new html content when the user wants to save their progress

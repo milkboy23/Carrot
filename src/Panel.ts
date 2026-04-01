@@ -38,11 +38,17 @@ export class Panel {
 		this._panel.webview.onDidReceiveMessage(
 			message => {
 				switch (message.command) {
+					case 'webviewReady':
+						const noteHtml = NoteManager.getInstance(context.workspaceState).loadNote(this.noteId);
+						this._panel.webview.postMessage({ 
+							command: 'loadNote', 
+							html: noteHtml 
+						});
+						return;
 					case 'alert':
 						vscode.window.showErrorMessage(message.text);
 						return;
-					
-					case 'saveNote':
+					case 'contentChanged':
 						NoteManager.getInstance(context.workspaceState).saveNote(this.noteId, this._extensionUri, message.html);
 						return;
 				}
@@ -106,23 +112,20 @@ export class Panel {
         const webview = this._panel.webview;
 
         this._panel.title = "Carrot Note";
-		this._panel.webview.html = this._getHtmlForWebview(webview);
-
-        // Load the note content
-        const noteHtml = NoteManager.getInstance(context.workspaceState).loadNote(this.noteId);
-        if (noteHtml) {
-            this._panel.webview.postMessage({ command: 'loadNote', html: noteHtml });
-        }
+		this._panel.webview.html = this._getHtmlForWebview(context, webview);
     }
 
-   	private _getHtmlForWebview(webview: vscode.Webview) {
+   	private _getHtmlForWebview(context: vscode.ExtensionContext, webview: vscode.Webview) {
 		// Local path to main script run in the webview
 		// And the uri we use to load this script in the webview
 		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'webview.js'));
 		const styleUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'webview.css'));
 
-		// Use a nonce to only allow specific scripts to be run
-		const nonce = getNonce();
+		// Load the note content
+        // const noteHtml = NoteManager.getInstance(context.workspaceState).loadNote(this.noteId);
+        // if (noteHtml) {
+        //     this._panel.webview.postMessage({ command: 'loadNote', html: noteHtml });
+        // }
 
 		return `
 			<!DOCTYPE html>
