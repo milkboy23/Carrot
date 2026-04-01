@@ -10,23 +10,25 @@ let carrotDecorationType: vscode.TextEditorDecorationType;
 
 export function activate(context: vscode.ExtensionContext) {
 
-	// to store carrot notes
-	vscode.workspace.fs.createDirectory(context.extensionUri);
-
+	// Initialize singleton DB managers 
 	CommentManager.init(context.workspaceState);
 	NoteManager.init(context.workspaceState);
 
+	// Create one instance of the decoration type
 	carrotDecorationType = Comment.createDecorationType(context);
+	// Registers the decoration type as a part of the extension.
 	context.subscriptions.push(carrotDecorationType);
 
-	// listen for changing the tab/file
+
+
+	// Listen for changing the tab/file
 	vscode.window.onDidChangeActiveTextEditor(editor => {
 		if (editor) {
 			restoreCommentsForEditor(context, editor);
 		}
 	});
 
-	// check the workspace for active text editors 
+	// Check for opening a new active text editor 
 	vscode.workspace.onDidOpenTextDocument(doc => {
 		const editor = vscode.window.visibleTextEditors.find(active => active.document === doc);
 		if (editor) {
@@ -34,9 +36,12 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
+	// Check if the current window has an active text editor
 	if (vscode.window.activeTextEditor) {
 		restoreCommentsForEditor(context, vscode.window.activeTextEditor);
 	};
+
+
 
 	// This provides the sidebar icon for Carrot extension
 	const sidebarProvider = new SidebarProvider(context.extensionUri);
@@ -45,48 +50,71 @@ export function activate(context: vscode.ExtensionContext) {
 		"carrot-sidebar",
 		sidebarProvider
 		));
-	
-	// Creates a new Carrot comment (pop-up)
-	vscode.commands.registerCommand('carrot.createCarrot', async () => {
-		const created = await Comment.createComment(context.extensionUri, vscode.window.activeTextEditor, 1, 1);
-		if(!created) { 
-			vscode.window.showErrorMessage("Unable to create decoration sucks to suck");
-		}
-		if (vscode.window.activeTextEditor) {
-				restoreCommentsForEditor(context, vscode.window.activeTextEditor);
-		}
-	});
 
-	vscode.commands.registerCommand('carrot.deleteCarrot', async () => {
-		const deleted = await Comment.deleteDecoration(vscode.window.activeTextEditor, context);
-		if(!deleted) { 
-			vscode.window.showErrorMessage("Unable to create decoration sucks to suck");
-		}
-		if (vscode.window.activeTextEditor) {
-				restoreCommentsForEditor(context, vscode.window.activeTextEditor);
-		}
-	});
-
-	// Create a new carrot comment with a full-page Carrot note attached
-	vscode.commands.registerCommand('carrot.commentAndNote', async () => {
-		const created = await Comment.createCommentAndNote(context.extensionUri, vscode.window.activeTextEditor, 1, 1);
-		if(!created) { 
-			vscode.window.showErrorMessage("Unable to create decoration sucks to suck");
-		}
-		if (vscode.window.activeTextEditor) {
-				restoreCommentsForEditor(context, vscode.window.activeTextEditor);
-		}
-	});
+		
 	
-	// Open the Carrot note associated with a comment when the command is executed
-	vscode.commands.registerCommand('carrot.openNote', (args) => {
-		const noteId = args && args[0] && args[0].noteId;
-		Panel.createOrShow(context.extensionUri, noteId);
-	});
+	/**
+	 * Sets up the createCarrot command. Calls CommentManager to store the Carrot comment.
+	 * Restores the prior Carrot comments to the editor.
+	 */
+	context.subscriptions.push(
+		vscode.commands.registerCommand('carrot.createCarrot', async () => {
+			const created = await Comment.createComment(context.extensionUri, vscode.window.activeTextEditor, 1, 1);
+			if(!created) { 
+				vscode.window.showErrorMessage("Unable to create Carrot comment.");
+			}
+			if (vscode.window.activeTextEditor) {
+					restoreCommentsForEditor(context, vscode.window.activeTextEditor);
+			}
+		})
+	);
+
+	/**
+	 * Deletes a Carrot comment and restores the active Carrot comments.
+	 */
+	context.subscriptions.push(
+		vscode.commands.registerCommand('carrot.deleteCarrot', async () => {
+			const deleted = await Comment.deleteDecoration(vscode.window.activeTextEditor, context);
+			if(!deleted) { 
+				vscode.window.showErrorMessage("Unable to delete Carrot comment.");
+			}
+			if (vscode.window.activeTextEditor) {
+					restoreCommentsForEditor(context, vscode.window.activeTextEditor);
+			}
+		})
+	);
+
+	/**
+	 * TODO: Might be removed, as creating Carrot comments automatically should create a note too.
+	 * Create a new carrot comment with a full-page Carrot note attached
+	 */ 
+	context.subscriptions.push(
+		vscode.commands.registerCommand('carrot.commentAndNote', async () => {
+			const created = await Comment.createCommentAndNote(context.extensionUri, vscode.window.activeTextEditor, 1, 1);
+			if(!created) { 
+				vscode.window.showErrorMessage("Unable to create a Carrot comment + note.");
+			}
+			if (vscode.window.activeTextEditor) {
+					restoreCommentsForEditor(context, vscode.window.activeTextEditor);
+			}
+		})
+	);
+	
+	/**
+	 * 	Open the Carrot note associated with a comment when the command is executed.
+	 *  The command is executed when the hyperlink in the Carrot comment is clicked.
+	 */
+	context.subscriptions.push(
+		vscode.commands.registerCommand('carrot.openNote', (args) => {
+			const noteId = args && args[0] && args[0].noteId;
+			Panel.createOrShow(context.extensionUri, noteId);
+		})
+	);
 }
 
 /**
- * Rendering comments with a markdown hyperlink.
+ * Restores the active Carrot comments to be displayed in the active text editor.
+ * Adds a markdown hyperlink to the corresponding note for each Carrot comment.
  */
 function restoreCommentsForEditor(context: vscode.ExtensionContext, editor: vscode.TextEditor) {
 	const comments = CommentManager.getCommentsForEditor(editor.document.uri);
@@ -103,7 +131,7 @@ function restoreCommentsForEditor(context: vscode.ExtensionContext, editor: vsco
 		markdownComment = new vscode.MarkdownString(comment.hoverMessage + `[Open note](${openNoteCommand})`);
 		// Set is trusted to allow the vscode hover message to show this markdown string
         markdownComment.isTrusted = true;
-		// Add each fully buildt comment to the list of decorations for this document
+		// Add each fully built comment to the list of decorations for this document
 		decorationOptions.push({
 			range: new vscode.Range(comment.start, 0, comment.start, 0),
 			hoverMessage: markdownComment
