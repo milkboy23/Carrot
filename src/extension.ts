@@ -100,7 +100,17 @@ export function activate(context: vscode.ExtensionContext) {
 	 */
 	context.subscriptions.push(
 		vscode.commands.registerCommand('carrot.openNote', (args) => {
-			const noteId = args && args[0] && args[0].noteId;
+			// Parse args if it's a string (from encoded URI)
+			const decodedArgs = decodeURIComponent(args);
+
+			// 3. Parse the JSON string back into an object/array
+			const noteId = parseInt(decodedArgs);
+
+			console.log(noteId);
+			
+			// Handle different argument structures
+			
+
 			Panel.createOrShow(context, context.extensionUri, noteId);
 		})
 	);
@@ -117,10 +127,8 @@ function restoreCommentsForEditor(context: vscode.ExtensionContext, editor: vsco
 	const decorationOptions: vscode.DecorationOptions[] = []
 	
 	for (const comment of comments) {
-		// Choose the arguments to pass to the method call
-		const args = [{ noteId: comment.noteId }];
 		// create the command with args and stringify
-		const openNoteCommand = `command:carrot.openNote?${encodeURIComponent(JSON.stringify(args))}`;
+		const openNoteCommand = `command:carrot.openNote?${encodeURIComponent(comment.noteId)}`;
 		// Build the markdown hovermessage with text and the new command
 		markdownComment = new vscode.MarkdownString(comment.hoverMessage + `[Open note](${openNoteCommand})`);
 		// Set is trusted to allow the vscode hover message to show this markdown string
