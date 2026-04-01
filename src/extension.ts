@@ -53,7 +53,7 @@ export function activate(context: vscode.ExtensionContext) {
 	 */
 	context.subscriptions.push(
 		vscode.commands.registerCommand('carrot.createCarrot', async () => {
-			const created = await Comment.createComment(context, vscode.window.activeTextEditor, 1, 1);
+			const created = await Comment.createComment(context, vscode.window.activeTextEditor);
 			if(!created) { 
 				vscode.window.showErrorMessage("Unable to create Carrot comment.");
 			}
@@ -84,7 +84,7 @@ export function activate(context: vscode.ExtensionContext) {
 	 */ 
 	context.subscriptions.push(
 		vscode.commands.registerCommand('carrot.commentAndNote', async () => {
-			const created = await Comment.createCommentAndNote(context, vscode.window.activeTextEditor, 1, 1);
+			const created = await Comment.createCommentAndNote(context, vscode.window.activeTextEditor);
 			if(!created) { 
 				vscode.window.showErrorMessage("Unable to create a Carrot comment + note.");
 			}
@@ -101,7 +101,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		vscode.commands.registerCommand('carrot.openNote', (args) => {
 			const noteId = args && args[0] && args[0].noteId;
-			Panel.createOrShow(context.extensionUri, noteId);
+			Panel.createOrShow(context, context.extensionUri, noteId);
 		})
 	);
 }

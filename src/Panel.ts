@@ -12,12 +12,12 @@ export class Panel {
     private _disposables: vscode.Disposable[] = [];
 	private noteId: number;
 
-    constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri, noteId: number){
+    constructor(context: vscode.ExtensionContext, panel: vscode.WebviewPanel, extensionUri: vscode.Uri, noteId: number){
         this._panel = panel;
         this._extensionUri = extensionUri;
 		this.noteId = noteId;
 
-        this._update();
+        this._update(context);
 
 		// Listen for when the panel is disposed
 		// This happens when the user closes the panel or when the panel is closed programmatically
@@ -27,7 +27,7 @@ export class Panel {
 		this._panel.onDidChangeViewState(
 			() => {
 				if (this._panel.visible) {
-					this._update();
+					this._update(context);
 				}
 			},
 			null,
@@ -43,7 +43,7 @@ export class Panel {
 						return;
 					
 					case 'saveNote':
-						NoteManager.saveNote(this.noteId, this._extensionUri, message.html);
+						NoteManager.getInstance(context.workspaceState).saveNote(this.noteId, this._extensionUri, message.html);
 						return;
 				}
 			},
@@ -73,7 +73,7 @@ export class Panel {
 	
     }
 
-    public static createOrShow(extensionUri: vscode.Uri, noteId: number) {
+    public static createOrShow(context: vscode.ExtensionContext, extensionUri: vscode.Uri, noteId: number) {
 		
         // Creates a column based on the text editor. Checks for null.
         const column = vscode.window.activeTextEditor
@@ -99,17 +99,17 @@ export class Panel {
         );
         
         // Set the panel.
-        Panel.currentPanel = new Panel(panel, extensionUri, noteId);
+        Panel.currentPanel = new Panel(context, panel, extensionUri, noteId);
     }
 
-    private _update(){
+    private _update(context: vscode.ExtensionContext){
         const webview = this._panel.webview;
 
         this._panel.title = "Carrot Note";
 		this._panel.webview.html = this._getHtmlForWebview(webview);
 
         // Load the note content
-        const noteHtml = NoteManager.loadNote(this.noteId);
+        const noteHtml = NoteManager.getInstance(context.workspaceState).loadNote(this.noteId);
         if (noteHtml) {
             this._panel.webview.postMessage({ command: 'loadNote', html: noteHtml });
         }

@@ -6,17 +6,17 @@ import { NoteManager } from "./NoteManager";
 
 export class Comment{
 
-    static async createComment (context: vscode.ExtensionContext, editor: vscode.TextEditor | undefined, id: number, noteId: number) : Promise<boolean>{
+    static async createComment (context: vscode.ExtensionContext, editor: vscode.TextEditor | undefined) : Promise<boolean>{
         
-        return await this.createDecoration(context, editor, id);
+        return await this.createDecoration(context, editor);
     }
 
-    static async createCommentAndNote (context: vscode.ExtensionContext, editor: vscode.TextEditor | undefined, id: number, noteId: number) : Promise<boolean> {
+    static async createCommentAndNote (context: vscode.ExtensionContext, editor: vscode.TextEditor | undefined) : Promise<boolean> {
 
-        return await this.createDecoration(context, editor, id);
+        return await this.createDecoration(context, editor);
     }
 
-    static async createDecoration(context: vscode.ExtensionContext, editor: vscode.TextEditor | undefined, id: number) : Promise<boolean>{
+    static async createDecoration(context: vscode.ExtensionContext, editor: vscode.TextEditor | undefined) : Promise<boolean>{
         if(!editor){
             vscode.window.showWarningMessage("No editor in use");
             return false;
