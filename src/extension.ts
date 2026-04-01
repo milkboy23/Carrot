@@ -10,10 +10,6 @@ let carrotDecorationType: vscode.TextEditorDecorationType;
 
 export function activate(context: vscode.ExtensionContext) {
 
-	// Initialize singleton DB managers 
-	CommentManager.init(context.workspaceState);
-	NoteManager.getInstance(context.workspaceState);
-
 	// Create one instance of the decoration type
 	carrotDecorationType = Comment.createDecorationType(context);
 	// Registers the decoration type as a part of the extension.
@@ -59,7 +55,7 @@ export function activate(context: vscode.ExtensionContext) {
 	 */
 	context.subscriptions.push(
 		vscode.commands.registerCommand('carrot.createCarrot', async () => {
-			const created = await Comment.createComment(context.extensionUri, vscode.window.activeTextEditor, 1, 1);
+			const created = await Comment.createComment(context, vscode.window.activeTextEditor, 1, 1);
 			if(!created) { 
 				vscode.window.showErrorMessage("Unable to create Carrot comment.");
 			}
@@ -90,7 +86,7 @@ export function activate(context: vscode.ExtensionContext) {
 	 */ 
 	context.subscriptions.push(
 		vscode.commands.registerCommand('carrot.commentAndNote', async () => {
-			const created = await Comment.createCommentAndNote(context.extensionUri, vscode.window.activeTextEditor, 1, 1);
+			const created = await Comment.createCommentAndNote(context, vscode.window.activeTextEditor, 1, 1);
 			if(!created) { 
 				vscode.window.showErrorMessage("Unable to create a Carrot comment + note.");
 			}
@@ -117,7 +113,7 @@ export function activate(context: vscode.ExtensionContext) {
  * Adds a markdown hyperlink to the corresponding note for each Carrot comment.
  */
 function restoreCommentsForEditor(context: vscode.ExtensionContext, editor: vscode.TextEditor) {
-	const comments = CommentManager.getCommentsForEditor(editor.document.uri);
+	const comments = CommentManager.getInstance(context.workspaceState).getCommentsForEditor(editor.document.uri);
 	let markdownComment: vscode.MarkdownString = new vscode.MarkdownString("");
 
 	const decorationOptions: vscode.DecorationOptions[] = []

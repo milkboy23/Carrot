@@ -3,14 +3,25 @@ import { SerializedComment } from './SerializedComment';
 
 export class CommentManager{
 
-    static workspaceState : vscode.Memento;
-
-    static init(workspaceState: vscode.Memento){
-        this.workspaceState = workspaceState;
-    }
+    private workspaceState : vscode.Memento;
+    
+        private static instance: CommentManager;
+    
+    
+        private constructor(workspaceState: vscode.Memento){
+            this.workspaceState = workspaceState;
+            console.log("NoteManager instance created!");
+        }
+    
+        public static getInstance(workspaceState: vscode.Memento){
+            if (!this.instance) {
+                CommentManager.instance = new CommentManager(workspaceState);
+            }
+            return CommentManager.instance;
+        }
     
     //adding a comment to the workspaceState by getting its primitive types and pushing to the comments array 
-    static addComment(id: number, noteId: number, editorUri: vscode.Uri, start: number, hoverMessage: string){
+    public addComment(id: number, noteId: number, editorUri: vscode.Uri, start: number, hoverMessage: string){
         const allComments = this.workspaceState.get<SerializedComment[]>("comments", []);
 
         allComments.push({
@@ -25,21 +36,21 @@ export class CommentManager{
     }        
 
     // gets the comments of the current editor by filtering through all comments
-    static getCommentsForEditor(editorUri: vscode.Uri) : SerializedComment[] {
+    public getCommentsForEditor(editorUri: vscode.Uri) : SerializedComment[] {
         const allComments = this.workspaceState.get<SerializedComment[]>("comments", []);
         const editorComments = allComments.filter(c => c.editorUri === editorUri.toString());
         return editorComments;
     }
 
     // gets the comments of the current editor and line by filtering through all comments
-    static getCommentsForLocation(editorUri: vscode.Uri, position: vscode.Position) : SerializedComment[] {
+    public getCommentsForLocation(editorUri: vscode.Uri, position: vscode.Position) : SerializedComment[] {
         const allComments = this.workspaceState.get<SerializedComment[]>("comments", []);
         const editorComments = allComments.filter(c => c.editorUri === editorUri.toString());
         const positionComments = editorComments.filter(c => c.start === position.line);
         return positionComments;
     }
 
-    static async deleteComments(commentsToDelete: SerializedComment[]) {
+    public async deleteComments(commentsToDelete: SerializedComment[]) {
         // New list for comments NOT to be deleted
         const newCommentList: SerializedComment[] = [];
         // Get all the old comments
