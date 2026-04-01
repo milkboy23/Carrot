@@ -1,15 +1,28 @@
 import * as vscode from "vscode";
 import { CommentManager } from "./CommentManager";
-
+import { Panel } from "./Panel";
+import { Note } from "./Note";
+import { NoteManager } from "./NoteManager";
 
 export class Comment{
 
-    static async createDecoration(editor: vscode.TextEditor | undefined, context: vscode.ExtensionContext, id: number, noteId: number) : Promise<boolean>{
+    static async createComment (context: vscode.ExtensionContext, editor: vscode.TextEditor | undefined) : Promise<boolean>{
+        
+        return await this.createDecoration(context, editor);
+    }
+
+    static async createCommentAndNote (context: vscode.ExtensionContext, editor: vscode.TextEditor | undefined) : Promise<boolean> {
+
+        return await this.createDecoration(context, editor);
+    }
+
+    static async createDecoration(context: vscode.ExtensionContext, editor: vscode.TextEditor | undefined) : Promise<boolean>{
         if(!editor){
             vscode.window.showWarningMessage("No editor in use");
             return false;
         }
 
+        
         //Get highlighted text
         const selection = editor.selection;
         const start = selection.start;
@@ -25,7 +38,6 @@ export class Comment{
         //TODO: iff (char is //) then replace it
         let firstslashremoved = comment.replace(comment.charAt(0), "");
         let textFromComment = firstslashremoved.replace(firstslashremoved.charAt(0), "");
-        let markdownComment = new vscode.MarkdownString(textFromComment + " [note](https://code.visualstudio.com/api/ux-guidelines/overview#containers)") // what to link to
 
         //Removes highlighted text
         const removed = await editor.edit(editBuilder => {
@@ -34,10 +46,13 @@ export class Comment{
         if(!removed){
             vscode.window.showErrorMessage("IDK bro seems weird");
         }
-        
-        // Add the new comment to the comment manager
-        await CommentManager.addComment(id, noteId, editor.document.uri, decorationLine, textFromComment);
 
+        // Create a serialized note for the comment and returns it id
+        const noteId = await NoteManager.getInstance(context.workspaceState).addNote(editor.document.uri, textFromComment);
+
+        // Add the new comment to the comment manager with the new note id
+        CommentManager.getInstance(context.workspaceState).addComment(noteId, editor.document.uri, decorationLine, textFromComment);
+        
         return true;
     }
 
@@ -66,9 +81,9 @@ export class Comment{
         const selection = editor.selection;
         const start = selection.start;
 
-        const commentsToDelete = CommentManager.getCommentsForLocation(editor.document.uri, start);
+        const commentsToDelete = CommentManager.getInstance(context.workspaceState).getCommentsForLocation(editor.document.uri, start);
 
-        await CommentManager.deleteComments(commentsToDelete);
+        await CommentManager.getInstance(context.workspaceState).deleteComments(commentsToDelete);
 
         return true;
     }

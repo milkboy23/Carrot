@@ -46,9 +46,14 @@
         "title": "Delete Selected Carrot Comment"
       },
       {
-        "command": "carrot.note",
+        "command": "carrot.commentAndNote",
         "category": "Carrot",
-        "title": "Open Note"
+        "title": "Create new Carrot Comment with Note"
+      },
+      {
+        "command": "carrot.openNote",
+        "category": "Carrot",
+        "title": "Open Carrot Note"
       }
     ],
     "keybindings": [
@@ -61,7 +66,13 @@
       {
         "command": "carrot.deleteCarrot",
         "key": "ctrl+alt+d",
-        "mac": "cmd+alt+d",
+        "mac": "cmd+alt+l",
+        "when": "editor.hasSelection"
+      },
+      {
+        "command": "carrot.commentAndNote",
+        "key": "ctrl+alt+n",
+        "mac": "cmd+alt+n",
         "when": "editor.hasSelection"
       }
     ]
