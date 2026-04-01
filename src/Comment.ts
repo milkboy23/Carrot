@@ -51,7 +51,7 @@ export class Comment{
         const noteId = await NoteManager.getInstance(context.workspaceState).addNote(editor.document.uri, textFromComment);
 
         // Add the new comment to the comment manager with the new note id
-        await CommentManager.getInstance(context.workspaceState).addComment(noteId, editor.document.uri, decorationLine, textFromComment);
+        CommentManager.getInstance(context.workspaceState).addComment(noteId, editor.document.uri, decorationLine, textFromComment);
         
         return true;
     }

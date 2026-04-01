@@ -10,7 +10,6 @@ export class NoteManager {
 
     private static instance: NoteManager;
 
-
     private constructor(workspaceState: vscode.Memento){
         this.workspaceState = workspaceState;
         this.nextId = 0;
@@ -24,8 +23,7 @@ export class NoteManager {
         return NoteManager.instance;
     }
 
-
-    public addNote(editorUri: vscode.Uri, hoverMessage: string) : number {
+    public async addNote(editorUri: vscode.Uri, hoverMessage: string) : Promise<number> {
         const allNotes = this.workspaceState.get<SerializedNote[]>("notes", []);
 
         const id = this.nextId
@@ -36,7 +34,7 @@ export class NoteManager {
         });
 
         this.nextId++;
-        this.workspaceState.update("notes", allNotes);
+        await this.workspaceState.update("notes", allNotes);
 
         return id;
     }
@@ -44,7 +42,7 @@ export class NoteManager {
     /**
      * Save an existing Carrot Note with new html content
      */
-    public saveNote(id: number, editorUri: vscode.Uri, html: string){
+    public async saveNote(id: number, editorUri: vscode.Uri, html: string){
         const allNotes = this.workspaceState.get<SerializedNote[]>("notes", []);
 
         // Remove existing note with same id
@@ -56,7 +54,7 @@ export class NoteManager {
             html: html
         });
 
-        this.workspaceState.update("notes", filteredNotes);
+        await this.workspaceState.update("notes", filteredNotes);
     }
 
     /**
@@ -68,4 +66,18 @@ export class NoteManager {
         const note = allNotes.find(note => note.id === id);
         return note ? note.html : undefined;
     }  
+
+    public async delete(idsToDelete: number[]) {
+        const allNotes = this.workspaceState.get<SerializedNote[]>("notes", []);
+        const newNoteList: SerializedNote[] = [];
+
+        for (const idToDelete of idsToDelete) {
+            for(const note of allNotes){
+                if (idToDelete !== note.id ) {
+                    newNoteList.push(note);
+                }
+             }
+        }
+        await this.workspaceState.update("notes", newNoteList);
+    }
 }

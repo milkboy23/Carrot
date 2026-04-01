@@ -1,5 +1,7 @@
 import * as vscode from 'vscode';
 import { SerializedComment } from './SerializedComment';
+import { SerializedNote } from './SerializedNote';
+import { NoteManager } from './NoteManager';
 
 export class CommentManager{
 
@@ -22,7 +24,7 @@ export class CommentManager{
     }
     
     //adding a comment to the workspaceState by getting its primitive types and pushing to the comments array 
-    public addComment(noteId: number, editorUri: vscode.Uri, start: number, hoverMessage: string){
+    public async addComment(noteId: number, editorUri: vscode.Uri, start: number, hoverMessage: string){
         const allComments = this.workspaceState.get<SerializedComment[]>("comments", []);
 
         allComments.push({
@@ -33,7 +35,7 @@ export class CommentManager{
             hoverMessage: hoverMessage
         });
 
-        this.workspaceState.update("comments", allComments);
+        await this.workspaceState.update("comments", allComments);
         this.nextId++;
     }        
 
@@ -57,14 +59,18 @@ export class CommentManager{
         const newCommentList: SerializedComment[] = [];
         // Get all the old comments
         const allComments = this.workspaceState.get<SerializedComment[]>("comments", []);
+        const notesToDelete: number[] = [];
         // Nested for loop: for each comment to delete, we compare it to all the old comments
         for (const commentToDelete of commentsToDelete) {
             for(const comment of allComments){
-                if (commentToDelete.id !== comment.id ) {
+                if (commentToDelete.id === comment.id ) {
+                    notesToDelete.push(comment.noteId);
+                } else {
                     newCommentList.push(comment);
                 }
              }
         }
+        await NoteManager.getInstance(this.workspaceState).delete(notesToDelete);
         await this.workspaceState.update("comments", newCommentList);
     }
 }
