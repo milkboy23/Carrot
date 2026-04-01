@@ -15,8 +15,6 @@ export function activate(context: vscode.ExtensionContext) {
 	// Registers the decoration type as a part of the extension.
 	context.subscriptions.push(carrotDecorationType);
 
-
-
 	// Listen for changing the tab/file
 	vscode.window.onDidChangeActiveTextEditor(editor => {
 		if (editor) {

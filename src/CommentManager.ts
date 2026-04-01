@@ -4,28 +4,29 @@ import { SerializedComment } from './SerializedComment';
 export class CommentManager{
 
     private workspaceState : vscode.Memento;
-    
-        private static instance: CommentManager;
-    
-    
-        private constructor(workspaceState: vscode.Memento){
-            this.workspaceState = workspaceState;
-            console.log("NoteManager instance created!");
+    private nextId: number;
+
+    private static instance: CommentManager;
+
+    private constructor(workspaceState: vscode.Memento){
+        this.workspaceState = workspaceState;
+        this.nextId = 0;
+        console.log("NoteManager instance created!");
+    }
+
+    public static getInstance(workspaceState: vscode.Memento){
+        if (!this.instance) {
+            CommentManager.instance = new CommentManager(workspaceState);
         }
-    
-        public static getInstance(workspaceState: vscode.Memento){
-            if (!this.instance) {
-                CommentManager.instance = new CommentManager(workspaceState);
-            }
-            return CommentManager.instance;
-        }
+        return CommentManager.instance;
+    }
     
     //adding a comment to the workspaceState by getting its primitive types and pushing to the comments array 
-    public addComment(id: number, noteId: number, editorUri: vscode.Uri, start: number, hoverMessage: string){
+    public addComment(noteId: number, editorUri: vscode.Uri, start: number, hoverMessage: string){
         const allComments = this.workspaceState.get<SerializedComment[]>("comments", []);
 
         allComments.push({
-            id: id,
+            id: this.nextId,
             noteId: noteId,
             editorUri: editorUri.toString(),
             start: start,
@@ -58,10 +59,7 @@ export class CommentManager{
         // Nested for loop: for each comment to delete, we compare it to all the old comments
         for (const commentToDelete of commentsToDelete) {
             for(const comment of allComments){
-                if (
-                    commentToDelete.start !== comment.start || 
-                    commentToDelete.editorUri !== comment.editorUri ) 
-                    {
+                if (commentToDelete.id !== comment.id ) {
                     newCommentList.push(comment);
                 }
              }

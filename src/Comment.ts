@@ -8,15 +8,15 @@ export class Comment{
 
     static async createComment (context: vscode.ExtensionContext, editor: vscode.TextEditor | undefined, id: number, noteId: number) : Promise<boolean>{
         
-        return await this.createDecoration(context, editor, id, noteId);
+        return await this.createDecoration(context, editor, id);
     }
 
     static async createCommentAndNote (context: vscode.ExtensionContext, editor: vscode.TextEditor | undefined, id: number, noteId: number) : Promise<boolean> {
 
-        return await this.createDecoration(context, editor, id, noteId);
+        return await this.createDecoration(context, editor, id);
     }
 
-    static async createDecoration(context: vscode.ExtensionContext, editor: vscode.TextEditor | undefined, id: number, noteId: number) : Promise<boolean>{
+    static async createDecoration(context: vscode.ExtensionContext, editor: vscode.TextEditor | undefined, id: number) : Promise<boolean>{
         if(!editor){
             vscode.window.showWarningMessage("No editor in use");
             return false;
@@ -47,10 +47,11 @@ export class Comment{
             vscode.window.showErrorMessage("IDK bro seems weird");
         }
 
-        // Create a serialized note for the comment
-        await NoteManager.getInstance(context.workspaceState).addNote(noteId, editor.document.uri, textFromComment);
-        // Add the new comment to the comment manager
-        await CommentManager.getInstance(context.workspaceState).addComment(id, noteId, editor.document.uri, decorationLine, textFromComment);
+        // Create a serialized note for the comment and returns it id
+        const noteId = await NoteManager.getInstance(context.workspaceState).addNote(editor.document.uri, textFromComment);
+
+        // Add the new comment to the comment manager with the new note id
+        await CommentManager.getInstance(context.workspaceState).addComment(noteId, editor.document.uri, decorationLine, textFromComment);
         
         return true;
     }
