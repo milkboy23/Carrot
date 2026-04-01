@@ -1,16 +1,28 @@
 import * as vscode from 'vscode';
 import { SerializedNote } from './SerializedNote';
+import { Note } from './Note';
 
-export class NoteManager{
+export class NoteManager {
 
-    static workspaceState : vscode.Memento;
+    private workspaceState : vscode.Memento;
 
-    static init(workspaceState: vscode.Memento){
+    private static instance: NoteManager;
+
+
+    private constructor(workspaceState: vscode.Memento){
         this.workspaceState = workspaceState;
+        console.log("NoteManager instance created!");
+    }
+
+    public static getInstance(workspaceState: vscode.Memento){
+        if (!this.instance) {
+            NoteManager.instance = new NoteManager(workspaceState);
+        }
+        return NoteManager.instance;
     }
 
 
-    static addNote(id: number, editorUri: vscode.Uri, hoverMessage: string){
+    public addNote(id: number, editorUri: vscode.Uri, hoverMessage: string){
         const allNotes = this.workspaceState.get<SerializedNote[]>("notes", []);
 
         allNotes.push({
@@ -25,7 +37,7 @@ export class NoteManager{
     /**
      * Save an existing Carrot Note with new html content
      */
-    static saveNote(id: number, editorUri: vscode.Uri, html: string){
+    public saveNote(id: number, editorUri: vscode.Uri, html: string){
         const allNotes = this.workspaceState.get<SerializedNote[]>("notes", []);
 
         // Remove existing note with same id
@@ -44,7 +56,7 @@ export class NoteManager{
      * Load a note from memory based on its id.
      */
 
-    static loadNote(id: number): string | undefined {
+    public loadNote(id: number): string | undefined {
         const allNotes = this.workspaceState.get<SerializedNote[]>("notes", []);
         const note = allNotes.find(note => note.id === id);
         return note ? note.html : undefined;

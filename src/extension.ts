@@ -12,7 +12,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Initialize singleton DB managers 
 	CommentManager.init(context.workspaceState);
-	NoteManager.init(context.workspaceState);
+	NoteManager.getInstance(context.workspaceState);
 
 	// Create one instance of the decoration type
 	carrotDecorationType = Comment.createDecorationType(context);

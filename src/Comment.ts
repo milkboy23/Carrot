@@ -48,7 +48,7 @@ export class Comment{
         }
         
         // Create a serialized note for the comment
-        await NoteManager.addNote(noteId, editor.document.uri, textFromComment);
+        //await NoteManager.getInstance(vscode.workspaceState).addNote(noteId, editor.document.uri, textFromComment);
         // Add the new comment to the comment manager
         await CommentManager.addComment(id, noteId, editor.document.uri, decorationLine, textFromComment);
 
