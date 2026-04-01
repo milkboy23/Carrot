@@ -34,6 +34,7 @@ export class CommentManager{
         });
 
         this.workspaceState.update("comments", allComments);
+        this.nextId++;
     }        
 
     // gets the comments of the current editor by filtering through all comments
