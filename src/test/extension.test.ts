@@ -9,7 +9,7 @@ import { CommentManager } from '../CommentManager';
 suite('Extension Test Suite', () => {
 	vscode.window.showInformationMessage('Start all tests.');
 
-	vscode.commands.executeCommand("carrot.createCarrot");
+	//vscode.commands.executeCommand("carrot.createCarrot");
 
 	suiteTeardown(() => {
 		vscode.window.showInformationMessage('All tests done!');
@@ -17,8 +17,12 @@ suite('Extension Test Suite', () => {
 
 	suiteSetup(() => {
 		const ext = vscode.extensions.getExtension("publisher.carrot");
-		const myContext = ext?.activate();
-	})
+		if (ext) {
+			const myContext = ext.activate();
+		} else {
+			vscode.window.showInformationMessage('All tests done!');
+		}
+	});
 
 
 	test('Sample test', () => {
