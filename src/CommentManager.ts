@@ -71,7 +71,7 @@ export class CommentManager{
                 }
              }
         }
-        await NoteManager.getInstance(this.workspaceState).delete(notesToDelete);
+        await NoteManager.getInstance(this.workspaceState).deleteNote(notesToDelete);
         await this.workspaceState.update("comments", newCommentList);
     }
 }

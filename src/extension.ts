@@ -8,8 +8,9 @@ import { NoteManager } from './NoteManager';
 
 let carrotDecorationType: vscode.TextEditorDecorationType;
 
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) : Promise<vscode.ExtensionContext> {
 
+	
 	// Create one instance of the decoration type
 	carrotDecorationType = Comment.createDecorationType(context);
 	// Registers the decoration type as a part of the extension.
@@ -114,6 +115,7 @@ export function activate(context: vscode.ExtensionContext) {
 			Panel.createOrShow(context, context.extensionUri, noteId);
 		})
 	);
+	return context;
 }
 
 /**

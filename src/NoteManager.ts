@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import { SerializedNote } from './SerializedNote';
-import { Note } from './Note';
 
 export class NoteManager {
 
@@ -68,7 +67,7 @@ export class NoteManager {
         return note ? note.html : undefined;
     }  
 
-    public async delete(idsToDelete: number[]) {
+    public async deleteNote(idsToDelete: number[]) {
         const allNotes = this.workspaceState.get<SerializedNote[]>("notes", []);
         const newNoteList: SerializedNote[] = [];
 
