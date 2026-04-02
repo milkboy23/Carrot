@@ -24,14 +24,22 @@ suite('Extension Test Suite', () => {
 		}
 	});
 
-
 	test('Sample test', () => {
 		assert.strictEqual(-1, [1, 2, 3].indexOf(5));
 		assert.strictEqual(-1, [1, 2, 3].indexOf(0));
 	});
 
 	test('Test CommentManager', () => {
-		vscode.commands.executeCommand("carrot.createCarrot");
-	})
+		//vscode.commands.executeCommand("carrot.createCarrot");
 
+		const fakeState = {
+			get: () => [],
+			update: async () => {}
+		} as unknown as vscode.Memento;
+
+		const instance1 = CommentManager.getInstance(fakeState);
+		const instance2 = CommentManager.getInstance(fakeState);
+
+		assert.strictEqual(instance1, instance2);
+	});
 });
