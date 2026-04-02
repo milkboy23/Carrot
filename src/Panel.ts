@@ -1,7 +1,5 @@
 import * as vscode from 'vscode';
 import { NoteManager } from './NoteManager';
-import { getNonce } from './getNonce';
-import { Note } from './Note';
 
 export class Panel {
     public static currentPanel: Panel | undefined;

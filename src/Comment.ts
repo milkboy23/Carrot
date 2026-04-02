@@ -1,7 +1,6 @@
 import * as vscode from "vscode";
 import { CommentManager } from "./CommentManager";
 import { Panel } from "./Panel";
-import { Note } from "./Note";
 import { NoteManager } from "./NoteManager";
 
 export class Comment{

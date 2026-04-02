@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import { SerializedNote } from './SerializedNote';
-import { Note } from './Note';
 
 export class NoteManager {
 
