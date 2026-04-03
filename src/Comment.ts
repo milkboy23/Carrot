@@ -34,23 +34,28 @@ export class Comment{
         }
 
         //Remove '//' from comment
-        //TODO: iff (char is //) then replace it
-        let firstslashremoved = comment.replace(comment.charAt(0), "");
-        let textFromComment = firstslashremoved.replace(firstslashremoved.charAt(0), "");
+        let parts = comment.split("//");
+        let commentWOslash = "";
+        let size = parts.length;
+        for (let i = 0; i < size; i++){
+            if (parts[i] !== "//") {
+                commentWOslash = commentWOslash + parts[i];
+            }
+        }
 
         //Removes highlighted text
         const removed = await editor.edit(editBuilder => {
             editBuilder.replace(selection, "");
         });
         if(!removed){
-            vscode.window.showErrorMessage("IDK bro seems weird");
+            vscode.window.showErrorMessage("The text could not be replaced");
         }
 
         // Create a serialized note for the comment and returns it id
-        const noteId = await NoteManager.getInstance(context.workspaceState).addNote(editor.document.uri, textFromComment);
+        const noteId = await NoteManager.getInstance(context.workspaceState).addNote(editor.document.uri, commentWOslash);
 
         // Add the new comment to the comment manager with the new note id
-        CommentManager.getInstance(context.workspaceState).addComment(noteId, editor.document.uri, decorationLine, textFromComment);
+        CommentManager.getInstance(context.workspaceState).addComment(noteId, editor.document.uri, decorationLine, commentWOslash);
         
         return true;
     }

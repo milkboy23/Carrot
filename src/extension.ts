@@ -126,7 +126,7 @@ function restoreCommentsForEditor(context: vscode.ExtensionContext, editor: vsco
 	const comments = CommentManager.getInstance(context.workspaceState).getCommentsForEditor(editor.document.uri);
 	let markdownComment: vscode.MarkdownString = new vscode.MarkdownString("");
 
-	const decorationOptions: vscode.DecorationOptions[] = []
+	const decorationOptions: vscode.DecorationOptions[] = [];
 	
 	for (const comment of comments) {
 		// create the command with args and stringify
