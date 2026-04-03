@@ -10,7 +10,6 @@ export class NoteManager {
     private constructor(workspaceState: vscode.Memento){
         this.workspaceState = workspaceState;
         this.workspaceState.get<number>("nextNoteId", 0);
-        console.log("NoteManager instance created!");
     }
 
     public static getInstance(workspaceState: vscode.Memento){
