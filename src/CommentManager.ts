@@ -12,7 +12,6 @@ export class CommentManager{
     private constructor(workspaceState: vscode.Memento){
         this.workspaceState = workspaceState;
         this.workspaceState.get<number>("nextCommentId", 0);
-        console.log("NoteManager instance created!");
     }
 
     public static getInstance(workspaceState: vscode.Memento){

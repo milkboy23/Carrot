@@ -101,16 +101,8 @@ export async function activate(context: vscode.ExtensionContext) : Promise<vscod
 	 */
 	context.subscriptions.push(
 		vscode.commands.registerCommand('carrot.openNote', (args) => {
-			// Parse args if it's a string (from encoded URI)
 			const decodedArgs = decodeURIComponent(args);
-
-			// 3. Parse the JSON string back into an object/array
-			const noteId = parseInt(decodedArgs);
-
-			console.log(noteId);
-			
-			// Handle different argument structures
-			
+			const noteId = parseInt(decodedArgs);			
 
 			Panel.createOrShow(context, context.extensionUri, noteId);
 		})
