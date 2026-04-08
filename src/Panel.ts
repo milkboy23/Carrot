@@ -114,31 +114,66 @@ export class Panel {
     }
 
    	private _getHtmlForWebview(context: vscode.ExtensionContext, webview: vscode.Webview) {
-		// Local path to main script run in the webview
-		// And the uri we use to load this script in the webview
 		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'webview.js'));
-		const styleUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'webview.css'));
-
-		// Load the note content
-        // const noteHtml = NoteManager.getInstance(context.workspaceState).loadNote(this.noteId);
-        // if (noteHtml) {
-        //     this._panel.webview.postMessage({ command: 'loadNote', html: noteHtml });
-        // }
+		const freeDrawScriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'index.js'));
+		const freeDrawStyleUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'index.css'));
+		const faviconSrc = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'assets', 'favicon.png'));
 
 		return `
 			<!DOCTYPE html>
 			<html lang="en">
 			<head>
 				<meta charset="UTF-8">
-				<link rel="stylesheet" href="${styleUri}">
+				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+				<link rel="icon" type="image/png" href="${faviconSrc}" />
+				<link rel="stylesheet" href="${freeDrawStyleUri}">
 				<style>
-					html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
-					#editor { height: 100%; width: 100%; }
+					/* Prevent the page from scrolling - we want a fixed split view */
+					html, body { 
+						height: 100%; 
+						width: 100%;
+						margin: 0; 
+						padding: 0; 
+						overflow: hidden; 
+						background-color: var(--vscode-editor-background);
+						display: flex;
+						flex-direction: column;
+					}
+
+					/* Container for Jodit */
+					#editor-wrapper { 
+						flex: 0 0 40%; /* Exactly 40% height, no growing or shrinking */
+						width: 100%;
+						border-bottom: 2px solid var(--vscode-panel-border);
+						box-sizing: border-box;
+						overflow: hidden;
+					}
+
+					/* Container for Free Draw Minimap */
+					#root { 
+						flex: 1; /* Takes up the remaining 60% */
+						width: 100%;
+						position: relative; /* Crucial for absolute-positioned canvases */
+						overflow: hidden;
+					}
+
+					/* Force Jodit container to fill its wrapper */
+					.jodit-container {
+						height: 100% !important;
+						border: none !important;
+					}
 				</style>
 			</head>
 			<body>
-				<textarea id="editor"></textarea>
+				<div id="editor-wrapper">
+					<textarea id="editor"></textarea>
+				</div>
+				
+				<div id="root"></div>
+
 				<script src="${scriptUri}"></script>
+				
+				<script type="module" src="${freeDrawScriptUri}"></script>
 			</body>
 			</html>
 		`;
