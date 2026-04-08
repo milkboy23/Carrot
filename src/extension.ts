@@ -70,11 +70,9 @@ export async function activate(context: vscode.ExtensionContext) : Promise<vscod
 	context.subscriptions.push(
 		vscode.commands.registerCommand('carrot.deleteCarrot', async () => {
 			const deleted = await Comment.deleteDecoration(vscode.window.activeTextEditor, context);
-			if(!deleted) { 
-				vscode.window.showErrorMessage("Unable to delete Carrot comment.");
-			}
-			if (vscode.window.activeTextEditor) {
-					restoreCommentsForEditor(context, vscode.window.activeTextEditor);
+			
+			if (vscode.window.activeTextEditor && deleted) {
+				restoreCommentsForEditor(context, vscode.window.activeTextEditor);
 			}
 		})
 	);
