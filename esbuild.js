@@ -1,7 +1,32 @@
 const esbuild = require('esbuild');
+const path = require('path');
+const fs = require('fs');
 
 const production = process.argv.includes('--production');
 const watch = process.argv.includes('--watch');
+
+
+// Helper function to copy assets:
+function copyAssets() {
+    const srcDir = path.join(__dirname, 'web', 'src', 'assets'); // Adjust if favicon is elsewhere
+    const destDir = path.join(__dirname, 'out', 'assets');
+
+    if (fs.existsSync(srcDir)) {
+        if (!fs.existsSync(destDir)) {
+            fs.mkdirSync(destDir, { recursive: true });
+        }
+        
+        // Copy favicon.png (add other files here if needed)
+        const filesToCopy = ['favicon.png']; 
+        filesToCopy.forEach(file => {
+            const srcFile = path.join(srcDir, file);
+            if (fs.existsSync(srcFile)) {
+                fs.copyFileSync(srcFile, path.join(destDir, file));
+                console.log(`Copied: ${file} to out/assets/`);
+            }
+        });
+    }
+}
 
 async function build() {
     // 1. Extension (Node.js)
@@ -23,17 +48,19 @@ async function build() {
             'index': 'web/src/main.tsx'    // Free Draw logic -> out/index.js
         },
         bundle: true,
-        format: 'esm', // Changed to ESM because you used type="module" in your HTML
+        format: 'iife', // Prevents global namespace collisions
         target: ['es2021'],
         outdir: 'out',
         // FIX 1: Add the "style" condition for Tailwind
         conditions: ['style'], 
+        inject: ['./src/react-shim.js'],
+        jsx: 'automatic', // Automatic transform to ensure react works
         loader: { 
             '.css': 'css', 
             '.tsx': 'tsx', 
             '.ts': 'ts',
             '.png': 'file',
-            '.svg': 'file',
+            '.svg': 'dataurl',
             // FIX 2: Add loader for fonts
             '.ttf': 'file',
             '.woff': 'file',
@@ -45,7 +72,14 @@ async function build() {
         define: {
             'process.env.NODE_ENV': production ? '"production"' : '"development"'
         },
-        nodePaths: ['src/web/node_modules']
+        nodePaths: ['src/web/node_modules'],
+        // This hook ensures assets are copied every time a rebuild happens
+        plugins: [{
+            name: 'copy-assets',
+            setup(build) {
+                build.onEnd(() => copyAssets());
+            },
+        }],
     });
 
     if (watch) {

@@ -46,20 +46,20 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 
   private _getHtmlForWebview(webview: vscode.Webview) {
     //Default CSS 
-    const styleResetUri = webview.asWebviewUri(
-      vscode.Uri.joinPath(this._extensionUri, "media", "reset.css")
-    );
-    const styleVSCodeUri = webview.asWebviewUri(
-      vscode.Uri.joinPath(this._extensionUri, "media", "vscode.css")
-    );
+    // const styleResetUri = webview.asWebviewUri(
+    //   vscode.Uri.joinPath(this._extensionUri, "media", "reset.css")
+    // );
+    // const styleVSCodeUri = webview.asWebviewUri(
+    //   vscode.Uri.joinPath(this._extensionUri, "media", "vscode.css")
+    // );
 
-    //Specific to sidebar
-    const scriptUri = webview.asWebviewUri(
-      vscode.Uri.joinPath(this._extensionUri, "out", "compiled/sidebar.js")
-    );
-    const styleMainUri = webview.asWebviewUri(
-      vscode.Uri.joinPath(this._extensionUri, "out", "compiled/sidebar.css")
-    );
+    // //Specific to sidebar
+    // const scriptUri = webview.asWebviewUri(
+    //   vscode.Uri.joinPath(this._extensionUri, "out", "compiled/sidebar.js")
+    // );
+    // const styleMainUri = webview.asWebviewUri(
+    //   vscode.Uri.joinPath(this._extensionUri, "out", "compiled/sidebar.css")
+    // );
 
 
     // Use a nonce to only allow a specific script to be run.
@@ -77,13 +77,15 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
       webview.cspSource
     }; script-src 'nonce-${nonce}';">
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-				<link href="${styleResetUri}" rel="stylesheet">
-				<link href="${styleVSCodeUri}" rel="stylesheet">
-        <link href="${styleMainUri}" rel="stylesheet">
+				<p> Placeholder for style </p>
 			</head>
       <body>
-				<script nonce="${nonce}" src="${scriptUri}"></script>
+				<p>placeholder for script<p/>
 			</body>
 			</html>`;
   }
+  // <link href="${styleResetUri}" rel="stylesheet">
+	// <link href="${styleVSCodeUri}" rel="stylesheet">
+  // <link href="${styleMainUri}" rel="stylesheet">
+  // <script nonce="${nonce}" src="${scriptUri}"></script>
 }

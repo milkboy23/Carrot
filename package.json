@@ -90,6 +90,7 @@
   "devDependencies": {
     "@types/mocha": "^10.0.10",
     "@types/node": "^22.19.15",
+    "@types/react": "^19.2.14",
     "@types/vscode": "^1.109.0",
     "@vscode/test-cli": "^0.0.12",
     "@vscode/test-electron": "^2.5.2",
@@ -99,6 +100,7 @@
     "typescript-eslint": "^8.56.1"
   },
   "dependencies": {
-    "jodit": "^4.11.15"
+    "jodit": "^4.11.15",
+    "react": "^19.2.4"
   }
 }

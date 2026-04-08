@@ -115,6 +115,8 @@ export class Panel {
 
    	private _getHtmlForWebview(context: vscode.ExtensionContext, webview: vscode.Webview) {
 		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'webview.js'));
+		const joditStyleUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'webview.css'));
+		
 		const freeDrawScriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'index.js'));
 		const freeDrawStyleUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'index.css'));
 		const faviconSrc = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'assets', 'favicon.png'));
@@ -126,12 +128,14 @@ export class Panel {
 				<meta charset="UTF-8">
 				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 				<link rel="icon" type="image/png" href="${faviconSrc}" />
+				
+				<link rel="stylesheet" href="${joditStyleUri}">
 				<link rel="stylesheet" href="${freeDrawStyleUri}">
+
 				<style>
-					/* Prevent the page from scrolling - we want a fixed split view */
 					html, body { 
-						height: 100%; 
-						width: 100%;
+						height: 100vh; 
+						width: 100vw;
 						margin: 0; 
 						padding: 0; 
 						overflow: hidden; 
@@ -140,26 +144,26 @@ export class Panel {
 						flex-direction: column;
 					}
 
-					/* Container for Jodit */
 					#editor-wrapper { 
-						flex: 0 0 40%; /* Exactly 40% height, no growing or shrinking */
+						flex: 0 0 50%; /* Start with 50/50 split */
 						width: 100%;
-						border-bottom: 2px solid var(--vscode-panel-border);
+						border-bottom: 1px solid var(--vscode-panel-border);
 						box-sizing: border-box;
 						overflow: hidden;
 					}
 
-					/* Container for Free Draw Minimap */
 					#root { 
-						flex: 1; /* Takes up the remaining 60% */
+						flex: 1; 
 						width: 100%;
-						position: relative; /* Crucial for absolute-positioned canvases */
+						position: relative;
 						overflow: hidden;
+						background: #1e1e1e; /* Dark background so canvas is visible */
 					}
 
-					/* Force Jodit container to fill its wrapper */
+					/* Ensure Jodit fills the wrapper */
 					.jodit-container {
 						height: 100% !important;
+						width: 100% !important;
 						border: none !important;
 					}
 				</style>
@@ -172,7 +176,6 @@ export class Panel {
 				<div id="root"></div>
 
 				<script src="${scriptUri}"></script>
-				
 				<script type="module" src="${freeDrawScriptUri}"></script>
 			</body>
 			</html>
