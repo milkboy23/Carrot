@@ -8,7 +8,7 @@ export default defineConfig({
   build: {
     // The out directory is relative to the root of the web project
     // so we need to go up one level to get to the dist folder in the root of the project
-    outDir: "../dist",
+    outDir: "../../../../out",
     rollupOptions: {
       output: {
         entryFileNames: "index.js",
