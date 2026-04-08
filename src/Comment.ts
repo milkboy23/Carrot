@@ -85,10 +85,19 @@ export class Comment{
         const selection = editor.selection;
         const start = selection.start;
 
-        const commentsToDelete = CommentManager.getInstance(context.workspaceState).getCommentsForLocation(editor.document.uri, start);
+        const userAction = await vscode.window.showWarningMessage(
+                                'Are you sure you want to delete this Carrot comment',
+                                'Proceed',
+                                'Cancel');
+        if (userAction === 'Proceed') {
+            const commentsToDelete = CommentManager.getInstance(context.workspaceState).getCommentsForLocation(editor.document.uri, start);
 
-        await CommentManager.getInstance(context.workspaceState).deleteComments(commentsToDelete);
+            await CommentManager.getInstance(context.workspaceState).deleteComments(commentsToDelete);
+            return true;
+        } else {
+            vscode.window.showInformationMessage("Action cancelled");
+            return false;
+        }
 
-        return true;
     }
 }
