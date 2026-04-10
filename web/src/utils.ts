@@ -471,9 +471,8 @@ const drawAnchors = (
 ) => {
   const padding = 3;
   const size = padding * 2;
-  const defaultColor = window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "#ffffff"
-    : "#000000";
+  // Changed: Always light mode
+  const defaultColor = "#000000";
   context.fillStyle = defaultColor;
   // Top left
   context.fillRect(x1 - padding, y1 - padding, size, size);
@@ -493,9 +492,8 @@ export const drawElement = (
   selectedElements: Element[]
 ) => {
   const isBeingErased = pendingEraseIds.includes(element.id);
-  const defaultColor = window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "#ffffff"
-    : "#000000";
+  // Changed: Always light mode
+  const defaultColor = "#000000";
 
   let color = element.color || defaultColor;
   if (isBeingErased) {
@@ -684,9 +682,10 @@ export const usePressedKeys = () => {
 };
 
 export function getRandomColor() {
-  const isDarkTheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  //const isDarkTheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
   // Get background color based on theme
-  const bgColor = isDarkTheme ? "#242424" : "#ffffff";
+  // Changed: Always light mode
+  const bgColor = "#ffffff";
 
   // Generate random colors until we find one with sufficient contrast
   while (true) {

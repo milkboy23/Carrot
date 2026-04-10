@@ -499,11 +499,12 @@ const App = () => {
     canvas.height = height * dpr;
     context.scale(dpr, dpr);
 
-    const isDarkTheme = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
+    // const isDarkTheme = window.matchMedia(
+    //   "(prefers-color-scheme: dark)"
+    // ).matches;
     // Get background color based on theme
-    const bgColor = isDarkTheme ? "#242424" : "#ffffff";
+    // Changed: Always white (light mode)
+    const bgColor =  "#ffffff";
 
     context.fillStyle = bgColor;
     context.fillRect(0, 0, canvas.width, canvas.height);

@@ -48,9 +48,8 @@ type AppState = {
   setCopiedElements: (copiedElements: Element[]) => void;
 };
 
-const color = window.matchMedia("(prefers-color-scheme: dark)").matches
-  ? "#ffffff"
-  : "#000000";
+ // Changed: Always light mode
+const color =  "#000000";
 
 const useAppState = create<AppState>((set) => ({
   isInitialized: false,
