@@ -40,7 +40,7 @@ export class Panel {
 						const noteHtml = NoteManager.getInstance(context.workspaceState).loadNote(this.noteId);
 						this._panel.webview.postMessage({ 
 							command: 'loadNote', 
-							html: noteHtml 
+							html: noteHtml
 						});
 						return;
 					case 'alert':
@@ -161,20 +161,7 @@ export class Panel {
 						position: absolute !important;
 						top: 1rem !important; left: 1rem !important;
 						z-index: 100 !important;
-					}
-
-					#root canvas {
-						max-width: 100% !important;
-						max-height: 100% !important;
-						object-fit: contain !important; /* Keeps the drawing aspect ratio sane */
-					}
-
-					/* Force the internal 'stage' or 'container' of Free Draw to match #root */
-					#root > div {
-						width: 100% !important;
-						height: 100% !important;
-						overflow: hidden !important;
-					}
+					}			
 
 					/* Ensure Jodit fills the wrapper */
 					.jodit-container {
@@ -193,13 +180,6 @@ export class Panel {
 
 				<script src="${scriptUri}"></script>
 				<script type="module" src="${freeDrawScriptUri}"></script>
-				<script>
-					window.addEventListener('load', () => {
-						setTimeout(() => {
-							window.dispatchEvent(new Event('resize'));
-						}, 200);
-					});
-				</script>
 			</body>
 			</html>
 		`;
