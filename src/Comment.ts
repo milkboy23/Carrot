@@ -21,11 +21,10 @@ export class Comment{
             return false;
         }
 
-        
         //Get highlighted text
         const selection = editor.selection;
         const start = selection.start;
-        const decorationLine= start.line+1;
+        const decorationLine = start.line+1;
         const comment = editor.document.getText(selection);
 
         if(!comment || comment.trim().length === 0) {
@@ -42,10 +41,16 @@ export class Comment{
                 commentWOslash = commentWOslash + parts[i];
             }
         }
+        
 
         //Removes highlighted text
         const removed = await editor.edit(editBuilder => {
-            editBuilder.replace(selection, "");
+            // Do not remove the last \n
+            if (selection.end.character === 0) {
+                editBuilder.replace(selection, "\n");
+            } else {
+                editBuilder.replace(selection, "");
+            }
         });
         if(!removed){
             vscode.window.showErrorMessage("The text could not be replaced");
