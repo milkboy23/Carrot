@@ -2,11 +2,22 @@
 
 import 'jodit/es2021/jodit.min.css';
 import { Jodit } from 'jodit';
+import 'jodit/esm/plugins/resizer/resizer';
+import 'jodit/esm/plugins/image/image';
 
 // Initialize Jodit
 const editor = Jodit.make('#editor', {
     height: '100%',
-    autofocus: true
+    autofocus: true,
+    resizer: {
+        showSize : true,
+        hideSizeTimeout : 500,
+        useAspectRatio : true,
+        forImageChangeAttributes: true,
+        //min_width: 50,
+        //min_height: 50
+    },
+    allowResizeTags: ['img', 'table', 'iframe']
 });
 
 // Set initial value
