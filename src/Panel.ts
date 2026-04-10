@@ -40,7 +40,7 @@ export class Panel {
 						const noteHtml = NoteManager.getInstance(context.workspaceState).loadNote(this.noteId);
 						this._panel.webview.postMessage({ 
 							command: 'loadNote', 
-							html: noteHtml 
+							html: noteHtml
 						});
 						return;
 					case 'alert':
@@ -114,31 +114,71 @@ export class Panel {
     }
 
    	private _getHtmlForWebview(context: vscode.ExtensionContext, webview: vscode.Webview) {
-		// Local path to main script run in the webview
-		// And the uri we use to load this script in the webview
 		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'webview.js'));
-		const styleUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'webview.css'));
-
-		// Load the note content
-        // const noteHtml = NoteManager.getInstance(context.workspaceState).loadNote(this.noteId);
-        // if (noteHtml) {
-        //     this._panel.webview.postMessage({ command: 'loadNote', html: noteHtml });
-        // }
+		const joditStyleUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'webview.css'));
+		
+		const freeDrawScriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'index.js'));
+		const freeDrawStyleUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'index.css'));
+		const faviconSrc = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'assets', 'favicon.png'));
 
 		return `
 			<!DOCTYPE html>
 			<html lang="en">
 			<head>
 				<meta charset="UTF-8">
-				<link rel="stylesheet" href="${styleUri}">
+				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+				<script src="https://cdn.tailwindcss.com"></script>
+				<link rel="icon" type="image/png" href="${faviconSrc}" />
+				
+				<link rel="stylesheet" href="${joditStyleUri}">
+				<link rel="stylesheet" href="${freeDrawStyleUri}">
+
 				<style>
-					html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
-					#editor { height: 100%; width: 100%; }
+					html, body { 
+						height: 100vh; 
+						width: 100vw;
+						margin: 0; 
+						padding: 0; 
+						overflow: hidden; 
+						display: flex;
+						flex-direction: column;
+					}
+
+					#editor-wrapper { 
+						flex: 0 0 50%; /* Top half */
+						width: 100%; border-bottom: 1px solid var(--vscode-panel-border);
+						position: relative; z-index: 10; overflow: hidden;
+					}
+					#root {
+						flex: 1; /* Bottom half */
+						width: 100%; position: relative;
+						overflow: hidden; 
+						touch-action: none;
+					}
+					/* Toolbar Positioning Override */
+					#root .fixed.top-4.left-4 {
+						position: absolute !important;
+						top: 1rem !important; left: 1rem !important;
+						z-index: 100 !important;
+					}			
+
+					/* Ensure Jodit fills the wrapper */
+					.jodit-container {
+						height: 100% !important;
+						width: 100% !important;
+						border: none !important;
+					}
 				</style>
 			</head>
 			<body>
-				<textarea id="editor"></textarea>
+				<div id="editor-wrapper">
+					<textarea id="editor"></textarea>
+				</div>
+				
+				<div id="root"></div>
+
 				<script src="${scriptUri}"></script>
+				<script type="module" src="${freeDrawScriptUri}"></script>
 			</body>
 			</html>
 		`;

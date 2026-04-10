@@ -1,3 +1,5 @@
+(window as any).global = window; // Fixes some Jodit/React global expectations
+
 import 'jodit/es2021/jodit.min.css';
 import { Jodit } from 'jodit';
 
