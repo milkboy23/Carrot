@@ -127,6 +127,7 @@ export class Panel {
 			<head>
 				<meta charset="UTF-8">
 				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+				<script src="https://cdn.tailwindcss.com"></script>
 				<link rel="icon" type="image/png" href="${faviconSrc}" />
 				
 				<link rel="stylesheet" href="${joditStyleUri}">
@@ -145,19 +146,34 @@ export class Panel {
 					}
 
 					#editor-wrapper { 
-						flex: 0 0 50%; /* Start with 50/50 split */
-						width: 100%;
-						border-bottom: 1px solid var(--vscode-panel-border);
-						box-sizing: border-box;
-						overflow: hidden;
+						flex: 0 0 50%; /* Top half */
+						width: 100%; border-bottom: 1px solid var(--vscode-panel-border);
+						position: relative; z-index: 10; overflow: hidden;
+					}
+					#root {
+						flex: 1; /* Bottom half */
+						width: 100%; position: relative;
+						overflow: hidden; background: #1e1e1e;
+						touch-action: none;
+					}
+					/* Toolbar Positioning Override */
+					#root .fixed.top-4.left-4 {
+						position: absolute !important;
+						top: 1rem !important; left: 1rem !important;
+						z-index: 100 !important;
 					}
 
-					#root { 
-						flex: 1; 
-						width: 100%;
-						position: relative;
-						overflow: hidden;
-						background: #1e1e1e; /* Dark background so canvas is visible */
+					#root canvas {
+						max-width: 100% !important;
+						max-height: 100% !important;
+						object-fit: contain !important; /* Keeps the drawing aspect ratio sane */
+					}
+
+					/* Force the internal 'stage' or 'container' of Free Draw to match #root */
+					#root > div {
+						width: 100% !important;
+						height: 100% !important;
+						overflow: hidden !important;
 					}
 
 					/* Ensure Jodit fills the wrapper */
@@ -177,6 +193,13 @@ export class Panel {
 
 				<script src="${scriptUri}"></script>
 				<script type="module" src="${freeDrawScriptUri}"></script>
+				<script>
+					window.addEventListener('load', () => {
+						setTimeout(() => {
+							window.dispatchEvent(new Event('resize'));
+						}, 200);
+					});
+				</script>
 			</body>
 			</html>
 		`;
