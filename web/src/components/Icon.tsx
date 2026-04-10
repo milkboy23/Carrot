@@ -35,7 +35,7 @@ export default function Icon({ name }: { name: keyof typeof Icons }) {
     <img
       src={Icons[name]}
       alt={name}
-      className="dark:invert invert-0 select-none pointer-events-none"
+      className="invert-0 select-none pointer-events-none"
     />
   );
 }

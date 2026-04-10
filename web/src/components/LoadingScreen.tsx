@@ -6,7 +6,8 @@ interface LoadingScreenProps {
 }
 
 const LoadingScreen: React.FC<LoadingScreenProps> = ({ width, height }) => {
-  const isDarkTheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  // Changed: Always light mode
+  const isDarkTheme = false;
 
   return (
     <div
