@@ -121,7 +121,7 @@ export default function Toolbar({ onSaveCanvas }: ToolbarProps) {
         <div
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
-          className="bg-black/10 dark:bg-white/10 rounded-md p-2 backdrop-blur-xs"
+          className="bg-black/10 rounded-md p-2 backdrop-blur-xs"
         >
           <div className="flex flex-row gap-2">
             <ToolbarButton

@@ -22,7 +22,7 @@ export default function ToolbarButton({
       onClick={onClick}
       disabled={disabled}
       className={`relative p-2 rounded-md transition-colors duration-200 ${
-        isActive ? "bg-black/20 dark:bg-white/20" : ""
+        isActive ? "bg-black/20" : ""
       } ${
         disabled
           ? "opacity-50 cursor-not-allowed cursor-not-allowed"
