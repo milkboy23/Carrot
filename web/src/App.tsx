@@ -504,7 +504,7 @@ const App = () => {
     // ).matches;
     // Get background color based on theme
     // Changed: Always white (light mode)
-    const bgColor =  "#9d0df0";
+    const bgColor =  "white";
 
     context.fillStyle = bgColor;
     context.fillRect(0, 0, canvas.width, canvas.height);
