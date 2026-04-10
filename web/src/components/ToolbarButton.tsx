@@ -26,7 +26,7 @@ export default function ToolbarButton({
       } ${
         disabled
           ? "opacity-50 cursor-not-allowed cursor-not-allowed"
-          : "hover:bg-black/10 dark:hover:bg-white/10 cursor-pointer"
+          : "hover:bg-black/10 cursor-pointer"
       }`}
       title={title}
     >
