@@ -157,10 +157,8 @@ const App = () => {
         const ry = Math.min(y1, y2);
         const rw = Math.abs(x2 - x1);
         const rh = Math.abs(y2 - y1);
-        const defaultColor = window.matchMedia("(prefers-color-scheme: dark)")
-          .matches
-          ? "#ffffff"
-          : "#000000";
+        // CHanged this to always have a black line
+        const defaultColor = "#000000";
         context.strokeStyle = defaultColor;
         context.setLineDash([5, 5]);
         context.strokeRect(rx, ry, rw, rh);

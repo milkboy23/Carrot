@@ -7,7 +7,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: white;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -15,11 +15,13 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Removed to always have white background
 @media (prefers-color-scheme: light) {
   :root {
-    background-color: #fff;
+    background-color: blue;
   }
 }
+  */
 
 @font-face {
   font-family: "DeliciousHandrawn-Regular";

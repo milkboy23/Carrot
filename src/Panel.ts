@@ -140,7 +140,6 @@ export class Panel {
 						margin: 0; 
 						padding: 0; 
 						overflow: hidden; 
-						background-color: var(--vscode-editor-background);
 						display: flex;
 						flex-direction: column;
 					}
@@ -153,7 +152,7 @@ export class Panel {
 					#root {
 						flex: 1; /* Bottom half */
 						width: 100%; position: relative;
-						overflow: hidden; background: #1e1e1e;
+						overflow: hidden; 
 						touch-action: none;
 					}
 					/* Toolbar Positioning Override */
