@@ -9,15 +9,16 @@ import 'jodit/esm/plugins/image/image';
 const editor = Jodit.make('#editor', {
     height: '100%',
     autofocus: true,
+    // tells jodit which HTML elements are allowed to be resized by user. By default supports img, table, iframe
+    allowResizeTags: new Set(['img', 'table', 'iframe']),
     resizer: {
-        showSize : true,
-        hideSizeTimeout : 500,
-        useAspectRatio : true,
-        forImageChangeAttributes: true,
-        //min_width: 50,
-        //min_height: 50
-    },
-    allowResizeTags: ['img', 'table', 'iframe']
+        showSize : true,     //show a small tooltip with current width/height
+        hideSizeTimeout : 500,  
+        useAspectRatio : true,  // keep the aspect ratio when resizing - prevents stretched images
+        forImageChangeAttributes: true,  // when resizing an image, update its HTML attributes
+        min_width: 20,  // min width allowed when resizing
+        min_height: 20  // min height allowed when resizing
+    }
 });
 
 // Set initial value
@@ -35,12 +36,12 @@ window.addEventListener('message', event => {
 
 // Optional: Communicate with the Extension Host
 const vscode = (window as any).acquireVsCodeApi();
- editor.events.on('change', () => {
-     vscode.postMessage({
-         command: 'contentChanged',
-         html: editor.value
-     });
- });
+editor.events.on('change', () => {
+    vscode.postMessage({
+        command: 'contentChanged',
+        html: editor.value
+    });
+});
 
 vscode.postMessage({ command: 'webviewReady' });
 
