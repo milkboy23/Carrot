@@ -54,8 +54,6 @@ export async function activate(context: vscode.ExtensionContext) : Promise<vscod
 		"carrot-sidebar",
 		sidebarProvider
 		));
-
-		
 	
 	/**
 	 * Sets up the createCarrot command. Calls CommentManager to store the Carrot comment.
@@ -65,7 +63,7 @@ export async function activate(context: vscode.ExtensionContext) : Promise<vscod
 		vscode.commands.registerCommand('carrot.createCarrot', async () => {
 			const created = await Comment.createComment(context, vscode.window.activeTextEditor);
 			if(!created) { 
-				vscode.window.showErrorMessage("Unable to create Carrot comment.");
+				vscode.window.showErrorMessage("Unable to create Carrot Comment. Please try again.");
 			}
 			if (vscode.window.activeTextEditor) {
 					restoreCommentsForEditor(context, vscode.window.activeTextEditor);
@@ -78,26 +76,12 @@ export async function activate(context: vscode.ExtensionContext) : Promise<vscod
 	 */
 	context.subscriptions.push(
 		vscode.commands.registerCommand('carrot.deleteCarrot', async () => {
-			const deleted = await Comment.deleteDecoration(vscode.window.activeTextEditor, context);
+			const deleted = await Comment.deleteComment(vscode.window.activeTextEditor, context);
 			
 			if (vscode.window.activeTextEditor && deleted) {
 				restoreCommentsForEditor(context, vscode.window.activeTextEditor);
-			}
-		})
-	);
-
-	/**
-	 * TODO: Might be removed, as creating Carrot comments automatically should create a note too.
-	 * Create a new carrot comment with a full-page Carrot note attached
-	 */ 
-	context.subscriptions.push(
-		vscode.commands.registerCommand('carrot.commentAndNote', async () => {
-			const created = await Comment.createCommentAndNote(context, vscode.window.activeTextEditor);
-			if(!created) { 
-				vscode.window.showErrorMessage("Unable to create a Carrot comment + note.");
-			}
-			if (vscode.window.activeTextEditor) {
-					restoreCommentsForEditor(context, vscode.window.activeTextEditor);
+			} else {
+				vscode.window.showErrorMessage("Unable to delete Carrot Comment. Please try again.");
 			}
 		})
 	);
@@ -120,6 +104,8 @@ export async function activate(context: vscode.ExtensionContext) : Promise<vscod
 /**
  * Restores the active Carrot comments to be displayed in the active text editor.
  * Adds a markdown hyperlink to the corresponding note for each Carrot comment.
+ * @param context 
+ * @param editor 
  */
 function restoreCommentsForEditor(context: vscode.ExtensionContext, editor: vscode.TextEditor) {
 	const comments = CommentManager.getInstance(context.workspaceState).getCommentsForEditor(editor.document.uri);

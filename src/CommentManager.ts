@@ -22,7 +22,7 @@ export class CommentManager{
         return CommentManager.instance;
     }
     
-    //adding a comment to the workspaceState by getting its primitive types and pushing to the comments array 
+    // adding a comment to the workspaceState by getting its primitive types and pushing to the comments array 
     public async addComment(noteId: number, editorUri: vscode.Uri, start: number, hoverMessage: string){
         const allComments = this.workspaceState.get<SerializedComment[]>("comments", []);
 

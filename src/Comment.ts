@@ -4,20 +4,15 @@ import { Panel } from "./Panel";
 import { NoteManager } from "./NoteManager";
 
 export class Comment{
-
-    static async createComment (context: vscode.ExtensionContext, editor: vscode.TextEditor | undefined) : Promise<boolean>{
-        
-        return await this.createDecoration(context, editor);
-    }
-
-    static async createCommentAndNote (context: vscode.ExtensionContext, editor: vscode.TextEditor | undefined) : Promise<boolean> {
-
-        return await this.createDecoration(context, editor);
-    }
-
-    static async createDecoration(context: vscode.ExtensionContext, editor: vscode.TextEditor | undefined) : Promise<boolean>{
+    /**
+     * Creates the Carrot Comment and its associated Carrot Note.
+     * @param context 
+     * @param editor 
+     * @returns true if successful
+     */
+    static async createComment(context: vscode.ExtensionContext, editor: vscode.TextEditor | undefined) : Promise<boolean>{
         if(!editor){
-            vscode.window.showWarningMessage("No editor in use");
+            vscode.window.showWarningMessage("No higlighted text. Please higlight the desired code comment.");
             return false;
         }
 
@@ -28,7 +23,7 @@ export class Comment{
         const comment = editor.document.getText(selection);
 
         if(!comment || comment.trim().length === 0) {
-            vscode.window.showWarningMessage("No text selected.");
+            vscode.window.showWarningMessage("No text selected. Please select non-empty text.");
             return false;
         }
 
@@ -53,7 +48,7 @@ export class Comment{
             }
         });
         if(!removed){
-            vscode.window.showErrorMessage("The text could not be replaced");
+            vscode.window.showErrorMessage("The text could not be replaced. Please try manually deleting the code comment.");
         }
 
         // Create a serialized note for the comment and returns it id
@@ -62,6 +57,7 @@ export class Comment{
         // Add the new comment to the comment manager with the new note id
         CommentManager.getInstance(context.workspaceState).addComment(noteId, editor.document.uri, decorationLine, commentWOslash);
         
+        vscode.window.showInformationMessage("Carrot Comment created successfully!");
         return true;
     }
 
@@ -81,9 +77,9 @@ export class Comment{
         return decorationType;
     } 
 
-    static async deleteDecoration(editor: vscode.TextEditor | undefined, context: vscode.ExtensionContext) : Promise<boolean>{
+    static async deleteComment(editor: vscode.TextEditor | undefined, context: vscode.ExtensionContext) : Promise<boolean>{
         if(!editor){
-            vscode.window.showWarningMessage("No editor in use");
+            vscode.window.showWarningMessage("No text highlighted. Please highlight text next to a Carrot Icon.");
             return false;
         }
 
@@ -92,16 +88,17 @@ export class Comment{
         const start = selection.start;
 
         const userAction = await vscode.window.showWarningMessage(
-                                'Are you sure you want to delete this Carrot comment',
+                                'Are you sure you want to delete this Carrot Comment',
                                 'Delete',
                                 'Cancel');
         if (userAction === 'Delete') {
             const commentsToDelete = CommentManager.getInstance(context.workspaceState).getCommentsForLocation(editor.document.uri, start);
 
             await CommentManager.getInstance(context.workspaceState).deleteComments(commentsToDelete);
+            vscode.window.showInformationMessage("Carrot Comment deleted successfully!");
             return true;
         } else {
-            vscode.window.showInformationMessage("Action cancelled");
+            vscode.window.showInformationMessage("Action cancelled. The Carrot Comment was not deleted.");
             return false;
         }
 
