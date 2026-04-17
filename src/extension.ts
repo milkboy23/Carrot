@@ -31,6 +31,15 @@ export async function activate(context: vscode.ExtensionContext) : Promise<vscod
 		}
 	});
 
+	vscode.workspace.onDidChangeTextDocument(event => {
+		const editor = vscode.window.activeTextEditor;
+		if(editor && event.document === editor.document){
+			CommentManager.getInstance(context.workspaceState).shiftComments(editor.document.uri, event);
+			restoreCommentsForEditor(context, editor);
+		}
+	});
+
+
 	// Check if the current window has an active text editor
 	if (vscode.window.activeTextEditor) {
 		restoreCommentsForEditor(context, vscode.window.activeTextEditor);

@@ -74,7 +74,8 @@ export class Comment{
         const decorationType = vscode.window.createTextEditorDecorationType({
             gutterIconPath : decoPath,
             gutterIconSize : "contain",
-            isWholeLine : true
+            isWholeLine : true,
+            rangeBehavior: vscode.DecorationRangeBehavior.OpenClosed
         });
 
         return decorationType;
