@@ -94,7 +94,7 @@ export class Panel {
         // otherwise, create new panel.
         const panel = vscode.window.createWebviewPanel(
             Panel.viewType, // Identifies the type of the webview. 
-            'Carrot Note', // Title of the panel displayed to the user
+            'Carrot Note ' + noteId.toString(), // Title of the panel displayed to the user
             column || vscode.ViewColumn.One, // Editor column to show the new webview panel in.
             {
                 enableScripts: true,
@@ -109,7 +109,7 @@ export class Panel {
     private _update(context: vscode.ExtensionContext){
         const webview = this._panel.webview;
 
-        this._panel.title = "Carrot Note";
+        this._panel.title = "Carrot Note " + this.noteId.toString();
 		this._panel.webview.html = this._getHtmlForWebview(context, webview);
     }
 
