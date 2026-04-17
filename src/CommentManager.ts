@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { SerializedComment } from './SerializedComment';
 import { SerializedNote } from './SerializedNote';
 import { NoteManager } from './NoteManager';
+import { Comment } from './Comment';
 
 export class CommentManager{
 
@@ -72,5 +73,41 @@ export class CommentManager{
         }
         await NoteManager.getInstance(this.workspaceState).deleteNote(notesToDelete);
         await this.workspaceState.update("comments", newCommentList);
+    }
+
+    /**
+     * Method to recalculate the line number of Carrot comments upon content changes.
+     * @param editorUri 
+     * @param event 
+     */
+    public async shiftComments(editorUri: vscode.Uri, event: vscode.TextDocumentChangeEvent){
+        let allComments = this.workspaceState.get<SerializedComment[]>("comments", []);
+        let modified = false;
+        for(const change of event.contentChanges){
+            // calculates how many new lines have been added in this particular change within the relevant range
+            const lineDelta = change.text.split("\n").length - 1 - (change.range.end.line - change.range.start.line);
+            
+            if(lineDelta === 0){
+                continue;
+            }
+
+            allComments = allComments.map(comment => {
+                // check if comment is located after the change
+                if(comment.editorUri === editorUri.toString() && comment.start > change.range.start.line){
+                    modified = true;
+                    return { 
+                        id: comment.id,
+                        noteId: comment.noteId,
+                        editorUri: comment.editorUri,
+                        start: comment.start + lineDelta,
+                        hoverMessage: comment.hoverMessage       
+                    };
+                }
+                return comment;
+            });
+        }
+        if(modified){
+            await this.workspaceState.update("comments", allComments);
+        }
     }
 }
