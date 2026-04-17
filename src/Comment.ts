@@ -93,9 +93,9 @@ export class Comment{
 
         const userAction = await vscode.window.showWarningMessage(
                                 'Are you sure you want to delete this Carrot comment',
-                                'Proceed',
+                                'Delete',
                                 'Cancel');
-        if (userAction === 'Proceed') {
+        if (userAction === 'Delete') {
             const commentsToDelete = CommentManager.getInstance(context.workspaceState).getCommentsForLocation(editor.document.uri, start);
 
             await CommentManager.getInstance(context.workspaceState).deleteComments(commentsToDelete);

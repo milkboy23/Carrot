@@ -45,23 +45,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
   }
 
   private _getHtmlForWebview(webview: vscode.Webview) {
-    //Default CSS 
-    // const styleResetUri = webview.asWebviewUri(
-    //   vscode.Uri.joinPath(this._extensionUri, "media", "reset.css")
-    // );
-    // const styleVSCodeUri = webview.asWebviewUri(
-    //   vscode.Uri.joinPath(this._extensionUri, "media", "vscode.css")
-    // );
-
-    // //Specific to sidebar
-    // const scriptUri = webview.asWebviewUri(
-    //   vscode.Uri.joinPath(this._extensionUri, "out", "compiled/sidebar.js")
-    // );
-    // const styleMainUri = webview.asWebviewUri(
-    //   vscode.Uri.joinPath(this._extensionUri, "out", "compiled/sidebar.css")
-    // );
-
-
+    
     // Use a nonce to only allow a specific script to be run.
     const nonce = getNonce();
 
@@ -77,15 +61,53 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
       webview.cspSource
     }; script-src 'nonce-${nonce}';">
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-				<p> Placeholder for style </p>
+				<h1> Instructions </h1>
 			</head>
       <body>
-				<p>placeholder for script<p/>
+        <h2> Commands for Windows OS </h2>
+				<h3> Create a Carrot Comment </h3>
+        <ol>
+          <li> Highlight the code comment you wish to transform into a Carrot Comment.</li>
+          <li> Then press: <code> ctrl + alt + c </code></li>
+          <li> You can now see your Carrot Comment upon hovering on the line next to the Carrot Icon that has appeared.</li>
+          <li> To access the associated Carrot Note, click <code>Open Note</code>.</li>
+          
+        <p><br></p>
+
+        </ol>
+        <h3> Delete a Carrot Comment </h3>
+        <p style="color: red;"> Please note: It is not possible to revert this action. This action deletes all the Carrot Comments on that line. </p>
+        <ol>
+          <li> Highlight the line next to the Carrot Icon of the Carrot Comment you wish to delete. </li>
+          <li> Then press: <code> ctrl + alt + d </code></li>
+          <li> A warning message will appear, click <code>Delete</code> if you are sure. 
+        </ol>
+
+
+        <p><br></p>
+        <p><br></p>
+
+        <h2> Commands for MacOS </h2>
+        <h3> Create a Carrot Comment </h3>
+        <ol>
+          <li> Highlight the code comment you wish to transform into a Carrot Comment. </li>
+          <li> Then press: <code> cmd + alt + c </code></li>
+          <li> You can now see your Carrot Comment upon hovering on the line next to the Carrot Icon that has appeared.</li>
+          <li> To access the associated Carrot Note, click <code>Open Note</code>.</li>
+        </ol>
+        
+        <p><br></p>
+
+        <h3> Delete a Carrot Comment </h3>
+        <p style="color: red;"> Please note: It is not possible to revert this action. This action deletes all the Carrot Comments on that line. </p>
+        <ol>
+          <li> Highlight the line next to the Carrot Icon of the Carrot Comment you wish to delete. </li>
+          <li> Then press: <code> cmd + alt + l </code></li>
+          <li> A warning message will appear, click <code>Delete</code> if you are sure. </li>
+        </ol>
+
 			</body>
 			</html>`;
   }
-  // <link href="${styleResetUri}" rel="stylesheet">
-	// <link href="${styleVSCodeUri}" rel="stylesheet">
-  // <link href="${styleMainUri}" rel="stylesheet">
-  // <script nonce="${nonce}" src="${scriptUri}"></script>
+
 }
