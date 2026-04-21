@@ -27,20 +27,29 @@ export class Comment{
             return false;
         }
 
-        //Remove '//' from comment
-        let parts = comment.split("//");
-        let commentWOslash = "";
+        //Remove '// ' from comment
+        let parts = comment.split("// ");
+        let commentWOslashspace = "";
         let size = parts.length;
         for (let i = 0; i < size; i++){
             if (parts[i] !== "//") {
-                commentWOslash = commentWOslash + parts[i];
+                commentWOslashspace = commentWOslashspace + parts[i];
+            }
+        }
+        //Remove '//' from comment
+        let parts2 = commentWOslashspace.split("//");
+        let commentWOslashes = "";
+        let size2 = parts2.length;
+        for (let i = 0; i < size2; i++){
+            if (parts2[i] !== "//") {
+                commentWOslashes = commentWOslashes + parts2[i];
             }
         }
 
         // Convert markdown comment to HTML for Carrot Notes
         var showdown  = require('showdown'),
             converter = new showdown.Converter(),
-            text      = commentWOslash,
+            text      = commentWOslashes,
             html      = converter.makeHtml(text);
 
         console.log(html);
@@ -62,7 +71,7 @@ export class Comment{
         const noteId = await NoteManager.getInstance(context.workspaceState).addNote(editor.document.uri, html);
 
         // Add the new comment to the comment manager with the new note id
-        CommentManager.getInstance(context.workspaceState).addComment(noteId, editor.document.uri, decorationLine, commentWOslash);
+        CommentManager.getInstance(context.workspaceState).addComment(noteId, editor.document.uri, decorationLine, commentWOslashes);
         
         vscode.window.showInformationMessage("Carrot Comment created successfully!");
         return true;
