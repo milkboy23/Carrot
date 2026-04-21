@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { CommentManager } from "./CommentManager";
-import { Panel } from "./Panel";
 import { NoteManager } from "./NoteManager";
+import { Console } from "console";
 
 export class Comment{
     /**
@@ -36,7 +36,14 @@ export class Comment{
                 commentWOslash = commentWOslash + parts[i];
             }
         }
-        
+
+        // Convert markdown comment to HTML for Carrot Notes
+        var showdown  = require('showdown'),
+            converter = new showdown.Converter(),
+            text      = commentWOslash,
+            html      = converter.makeHtml(text);
+
+        console.log(html);
 
         //Removes highlighted text
         const removed = await editor.edit(editBuilder => {
@@ -52,7 +59,7 @@ export class Comment{
         }
 
         // Create a serialized note for the comment and returns it id
-        const noteId = await NoteManager.getInstance(context.workspaceState).addNote(editor.document.uri, commentWOslash);
+        const noteId = await NoteManager.getInstance(context.workspaceState).addNote(editor.document.uri, html);
 
         // Add the new comment to the comment manager with the new note id
         CommentManager.getInstance(context.workspaceState).addComment(noteId, editor.document.uri, decorationLine, commentWOslash);
