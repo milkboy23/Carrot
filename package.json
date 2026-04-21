@@ -101,6 +101,7 @@
   },
   "dependencies": {
     "jodit": "^4.11.15",
-    "react": "^19.2.4"
+    "react": "^19.2.4",
+    "showdown": "^2.1.0"
   }
 }
