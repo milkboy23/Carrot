@@ -19,19 +19,18 @@ A Visual Studio Code Extension targeted at students. Makes code comments unobtru
 > image
 
 - Multi-media: Store images in your Carrot Notes.
-hello
 
 > image or animation
 
 - Multi-media: Create drawings in your Carrot Notes with the whiteboard feature.
-hello
 
 > image or animation
 
-- Delete your carrot comments
+- Delete your Carrot Comments.
 
 <img src="media/gif/DeleteCarrotComment.gif" alt="Unobtrusive comments" style="width:50%; height:auto;">
 
+You can find the keybinds at anytime in the sidebar.
 
 ## Extension Settings
 
