@@ -20,37 +20,23 @@ export class Comment{
         const selection = editor.selection;
         const start = selection.start;
         const decorationLine = start.line+1;
-        const comment = editor.document.getText(selection);
+        const rawComment = editor.document.getText(selection);
 
-        if(!comment || comment.trim().length === 0) {
+        if (!rawComment || rawComment.trim().length === 0) {
             vscode.window.showWarningMessage("No text selected. Please select non-empty text.");
             return false;
         }
 
-        //Remove '// ' from comment
-        let parts = comment.split("// ");
-        let commentWOslashspace = "";
-        let size = parts.length;
-        for (let i = 0; i < size; i++){
-            if (parts[i] !== "//") {
-                commentWOslashspace = commentWOslashspace + parts[i];
-            }
-        }
-        //Remove '//' from comment
-        let parts2 = commentWOslashspace.split("//");
-        let commentWOslashes = "";
-        let size2 = parts2.length;
-        for (let i = 0; i < size2; i++){
-            if (parts2[i] !== "//") {
-                commentWOslashes = commentWOslashes + parts2[i];
-            }
-        }
+        // Process lines to remove indentation and comment markers
+        const cleanMarkdown = rawComment
+            .split(/\r?\n/)
+            .map(line => line.replace(/^\s*\/\/ ?/, ''))
+            .join('\n');
 
-        // Convert markdown comment to HTML for Carrot Notes
-        var showdown  = require('showdown'),
-            converter = new showdown.Converter(),
-            text      = commentWOslashes,
-            html      = converter.makeHtml(text);
+        // Convert to HTML
+        const showdown = require('showdown');
+        const converter = new showdown.Converter();
+        const html = converter.makeHtml(cleanMarkdown);
 
         console.log(html);
 
@@ -71,7 +57,7 @@ export class Comment{
         const noteId = await NoteManager.getInstance(context.workspaceState).addNote(editor.document.uri, html);
 
         // Add the new comment to the comment manager with the new note id
-        CommentManager.getInstance(context.workspaceState).addComment(noteId, editor.document.uri, decorationLine, commentWOslashes);
+        CommentManager.getInstance(context.workspaceState).addComment(noteId, editor.document.uri, decorationLine, cleanMarkdown);
         
         vscode.window.showInformationMessage("Carrot Comment created successfully!");
         return true;
@@ -80,7 +66,7 @@ export class Comment{
     static createDecorationType(context: vscode.ExtensionContext) : vscode.TextEditorDecorationType {
         
         //1. Get decoration image path
-        const decoPath = vscode.Uri.joinPath(context.extensionUri, "media", "images", "carrot-decoration.svg"); 
+        const decoPath = vscode.Uri.joinPath(context.extensionUri, "media", "images", "carrot-decoration.png"); 
 
         //2. Define decoration type
         const decorationType = vscode.window.createTextEditorDecorationType({
