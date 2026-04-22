@@ -91,7 +91,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
         <h3> Create a Carrot Comment </h3>
         <ol>
           <li> Highlight the code comment you wish to transform into a Carrot Comment. </li>
-          <li> Then press: <code> cmd + alt + c </code></li>
+          <li> Then press: <code> command + option + c </code></li>
           <li> You can now see your Carrot Comment upon hovering on the line next to the Carrot Icon that has appeared.</li>
           <li> To access the associated Carrot Note, click <code>Open Note</code>.</li>
         </ol>
@@ -102,7 +102,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
         <p style="color: red;"> Please note: It is not possible to revert this action. This action deletes all the Carrot Comments on that line. </p>
         <ol>
           <li> Highlight the line next to the Carrot Icon of the Carrot Comment you wish to delete. </li>
-          <li> Then press: <code> cmd + alt + l </code></li>
+          <li> Then press: <code> command + option + l </code></li>
           <li> A warning message will appear, click <code>Delete</code> if you are sure. </li>
         </ol>
 
