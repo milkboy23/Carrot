@@ -1,11 +1,17 @@
 {
   "name": "carrot",
-  "displayName": "Carrot",
+  "publisher": "EmmaAndrea",
+  "displayName": "Carrot Comments Extension",
   "description": "",
-  "version": "0.0.1",
+  "version": "0.0.2",
+  "icon": "media/images/carrot-decoration.png",
   "engines": {
     "vscode": "^1.109.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/milkboy23/Carrot"
+  },  
   "categories": [
     "Other"
   ],
@@ -19,7 +25,7 @@
         {
           "id": "carrot-sidebar-view",
           "title": "Carrot",
-          "icon": "media/images/carrot-icon.svg"
+          "icon": "media/images/carrot-icon.png"
         }
       ]
     },
@@ -29,7 +35,7 @@
           "type": "webview",
           "id": "carrot-sidebar",
           "name": "Carrot",
-          "icon": "media/images/carrot-icon.svg",
+          "icon": "media/images/carrot-icon.png",
           "contextualTitle": "Carrot"
         }
       ]

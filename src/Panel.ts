@@ -32,7 +32,7 @@ export class Panel {
 			this._disposables
 		);
 
-		// Handle messages from the webview
+		
 		this._panel.webview.onDidReceiveMessage(
 			message => {
 				switch (message.command) {
