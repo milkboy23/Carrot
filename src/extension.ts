@@ -117,7 +117,7 @@ function restoreCommentsForEditor(context: vscode.ExtensionContext, editor: vsco
 		// create the command with args and stringify
 		const openNoteCommand = `command:carrot.openNote?${encodeURIComponent(comment.noteId)}`;
 		// Build the markdown hovermessage with text and the new command
-		markdownComment = new vscode.MarkdownString(comment.hoverMessage + ` \n[Open note](${openNoteCommand})`);
+		markdownComment = new vscode.MarkdownString(comment.hoverMessage + ' \n ' + `[Open note](${openNoteCommand})`);
 		// Set is trusted to allow the vscode hover message to show this markdown string
         markdownComment.isTrusted = true;
 		// Add each fully built comment to the list of decorations for this document
