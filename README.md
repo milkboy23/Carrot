@@ -12,7 +12,7 @@ Carrot is a Visual Studio Code extension that transforms ordinary code comments 
 
 <img src="media/gif/OpenCarrotNote.gif" alt="Unobtrusive comments" style="width:80%; height:auto;">
 
-- Format your Carrot Notes: Use the rich text area in the your Carrot Notes to format your notes!
+- Format your Carrot Notes: Use the rich text area in your Carrot Notes to format your notes!
 
 <img src="media/gif/CarrotFormattingText.gif" alt="Unobtrusive comments" style="width:80%; height:auto;">
 
@@ -39,6 +39,7 @@ This extension contributes the following settings:
 * keybindings `command + option + l` / `ctrl + alt + d` to delete a Carrot Comment
 
 ## Known Issues
+Text button in whiteboard feature is inconsistent in showing text.
 
 ## Release Notes
 
