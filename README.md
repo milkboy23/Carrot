@@ -2,8 +2,6 @@
 
 Carrot is a Visual Studio Code extension that transforms ordinary code comments into interactive, persistent Carrot Notes. Instead of cluttering your code with inline comments, Carrot lets you convert them into annotations that appear as icons in the editor gutter. Each annotation can be opened as a dedicated Carrot Note, where you can expand your thoughts  using a rich text editor and a free-draw feature that allows you to sketch and visually structure your notes.
 
-A Visual Studio Code Extension targeted at students. Makes code comments unobtrusive, formatted and capable of storing multi-media.
-
 ## Features
 
 - Unobtrusive Code Comments: Hide your comments behind a Carrot Icon.
