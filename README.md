@@ -23,20 +23,24 @@ You can find the keybinds at anytime in the sidebar.
 - To create a Carrot Comment, highlight the code comment and press:
   - On Windows: `ctrl + alt + c`
   - On MacOS: `command + option + c`
+
 <img src="media/gif/SimpleCarrotComment.gif" alt="Unobtrusive comments" style="width:50%; height:auto;">
 
 - To format your Carrot Comments, write in Markdown syntax. For multi-line comments begin each new line with `//`.
+  - To access the associated Carrot Note, click `Open Note`.
 
-  To access the associated Carrot Note, click `Open Note`.
 <img src="media/gif/OpenCarrotNote.gif" alt="Unobtrusive comments" style="width:80%; height:auto;">
 
 - To format your Carrot Notes, use the rich text editor provided.
+
 <img src="media/gif/CarrotFormattingText.gif" alt="Unobtrusive comments" style="width:80%; height:auto;">
 
 - To create drawings in your Carrot Notes, use the whiteboard feature provided.
+
 <img src="media/gif/DrawingOnWhteboard.gif" alt="Unobtrusive comments" style="width:80%; height:auto;">
 
 - To attach images to your Carrot Notes, select/copy and paste any image into the rich text editor.
+
 <img src="media/gif/InsertAndResizeImage.gif" alt="Unobtrusive comments" style="width:80%; height:auto;">
 
 - To delete a Carrot Comment, highlight the line next to the Carrot Icon and press:
@@ -44,6 +48,7 @@ You can find the keybinds at anytime in the sidebar.
   - On MacOS: `command + option + l`
 
   Beware: This permanently deletes the Carrot Comment.
+  
 <img src="media/gif/DeleteCarrotComment.gif" alt="Unobtrusive comments" style="width:50%; height:auto;">
 
 ## Extension Settings
