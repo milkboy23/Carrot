@@ -10,19 +10,19 @@ Carrot is a Visual Studio Code extension that transforms ordinary code comments 
 
 - Format your Carrot Comments: Write your comments in markdown and see formatted text in your hover messages!
 
-<img src="media/gif/OpenCarrotNote.gif" alt="Unobtrusive comments" style="width:50%; height:auto;">
+<img src="media/gif/OpenCarrotNote.gif" alt="Unobtrusive comments" style="width:80%; height:auto;">
 
 - Format your Carrot Notes: Use the rich text area in the your Carrot Notes to format your notes!
 
-> image
-
-- Multi-media: Store images in your Carrot Notes.
-
-> image or animation
+<img src="media/gif/CarrotFormattingText.gif" alt="Unobtrusive comments" style="width:80%; height:auto;">
 
 - Multi-media: Create drawings in your Carrot Notes with the whiteboard feature.
 
-> image or animation
+<img src="media/gif/DrawingOnWhteboard.gif" alt="Unobtrusive comments" style="width:80%; height:auto;">
+
+- Multi-media: Store images in your Carrot Notes.
+
+<img src="media/gif/InsertAndResizeImage.gif" alt="Unobtrusive comments" style="width:80%; height:auto;">
 
 - Delete your Carrot Comments.
 
