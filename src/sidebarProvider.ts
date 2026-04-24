@@ -65,7 +65,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 			</head>
       <body>
 
-        <h2> Commands for Windows OS </h2>
+        <h2> Commands for Windows </h2>
 
 				<h3> Create a Carrot Comment </h3>
         <ol>
