@@ -81,7 +81,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
         <ol>
           <li> Press: <code> ctrl + z </code></li>
           <li> The original code comment will reappear.
-          <li> Then, follow the steps bellow to delete the Carrot Comment.
+          <li> Then, follow the steps below to delete the Carrot Comment.
         </ol>
 
         <p><br></p>
@@ -94,7 +94,6 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
           <li> Then press: <code> ctrl + alt + d </code></li>
           <li> A warning message will appear, click <code>Delete</code> if you are sure. 
         </ol>
-
 
         <p><br></p>
 
@@ -114,7 +113,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
         <ol>
           <li> Press: <code> command + z </code></li>
           <li> The original code comment will reappear.
-          <li> Then, follow the steps bellow to delete the Carrot Comment.
+          <li> Then, follow the steps below to delete the Carrot Comment.
         </ol>
 
         <p><br></p>
@@ -126,6 +125,12 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
           <li> Then press: <code> command + option + l </code></li>
           <li> A warning message will appear, click <code>Delete</code> if you are sure. </li>
         </ol>
+
+        <p><br></p>
+        <p><br></p>
+        <p><br></p>
+        <p><br></p>
+
 
 			</body>
 			</html>`;
