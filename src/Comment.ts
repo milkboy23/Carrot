@@ -38,7 +38,7 @@ export class Comment{
         const converter = new showdown.Converter();
         const html = converter.makeHtml(cleanMarkdown);
 
-        console.log(html);
+   
 
         //Removes highlighted text
         const removed = await editor.edit(editBuilder => {
