@@ -3,19 +3,19 @@ import { NoteManager } from './NoteManager';
 
 export class Panel {
     public static currentPanel: Panel | undefined;
-    public static readonly viewType = 'carrotNote';
+    private static readonly _viewType = 'carrotNote';
 
     private readonly _panel: vscode.WebviewPanel;
     private readonly _extensionUri: vscode.Uri;
     private _disposables: vscode.Disposable[] = [];
-	private noteId: number;
+	private _noteId: number;
 
     constructor(context: vscode.ExtensionContext, panel: vscode.WebviewPanel, extensionUri: vscode.Uri, noteId: number){
         this._panel = panel;
         this._extensionUri = extensionUri;
-		this.noteId = noteId;
+		this._noteId = noteId;
 
-        this._update(context);
+        this._update();
 
 		// Listen for when the panel is disposed
 		// This happens when the user closes the panel or when the panel is closed programmatically
@@ -25,7 +25,7 @@ export class Panel {
 		this._panel.onDidChangeViewState(
 			() => {
 				if (this._panel.visible) {
-					this._update(context);
+					this._update();
 				}
 			},
 			null,
@@ -37,7 +37,7 @@ export class Panel {
 			message => {
 				switch (message.command) {
 					case 'webviewReady':
-						const noteHtml = NoteManager.getInstance(context.workspaceState).loadNote(this.noteId);
+						const noteHtml = NoteManager.getInstance(context.workspaceState).loadNote(this._noteId);
 						this._panel.webview.postMessage({ 
 							command: 'loadNote', 
 							html: noteHtml
@@ -47,7 +47,7 @@ export class Panel {
 						vscode.window.showErrorMessage(message.text);
 						return;
 					case 'contentChanged':
-						NoteManager.getInstance(context.workspaceState).saveNote(this.noteId, this._extensionUri, message.html);
+						NoteManager.getInstance(context.workspaceState).saveNote(this._noteId, this._extensionUri, message.html);
 						return;
 				}
 			},
@@ -93,7 +93,7 @@ export class Panel {
 
         // otherwise, create new panel.
         const panel = vscode.window.createWebviewPanel(
-            Panel.viewType, // Identifies the type of the webview. 
+            Panel._viewType, // Identifies the type of the webview. 
             'Carrot Note ' + noteId.toString(), // Title of the panel displayed to the user
             column || vscode.ViewColumn.One, // Editor column to show the new webview panel in.
             {
@@ -106,14 +106,14 @@ export class Panel {
         Panel.currentPanel = new Panel(context, panel, extensionUri, noteId);
     }
 
-    private _update(context: vscode.ExtensionContext){
+    private _update(){
         const webview = this._panel.webview;
 
-        this._panel.title = "Carrot Note " + this.noteId.toString();
-		this._panel.webview.html = this._getHtmlForWebview(context, webview);
+        this._panel.title = "Carrot Note " + this._noteId.toString();
+		this._panel.webview.html = this._getHtmlForWebview(webview);
     }
 
-   	private _getHtmlForWebview(context: vscode.ExtensionContext, webview: vscode.Webview) {
+   	private _getHtmlForWebview(webview: vscode.Webview) {
 		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'webview.js'));
 		const joditStyleUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'webview.css'));
 		

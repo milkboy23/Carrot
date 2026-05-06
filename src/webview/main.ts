@@ -4,8 +4,6 @@ import 'jodit/es2021/jodit.min.css';
 import { Jodit } from 'jodit';
 import 'jodit/esm/plugins/resizer/resizer';
 import 'jodit/esm/plugins/image/image';
-//import 'jodit/esm/plugins/paragraph-style/paragraph-style'; // Wrong
-//import 'jodit/esm/plugins/list/list';               // Wrong
 import 'jodit/esm/plugins/format-block/format-block'; // Handles H1, H2, etc.
 import 'jodit/esm/plugins/ordered-list/ordered-list'; 
 import 'jodit/esm/plugins/indent/indent';           // Helps with list spacing
@@ -18,16 +16,9 @@ const editor = Jodit.make('#editor', {
     autofocus: true,
     iframe: true,
 
-    // buttons: [
-    //     'bold', 'italic', 'underline', '|', 
-    //     'ul', 'ol', '|', 
-    //     'paragraph', 'fontsize', 'brush', '|',
-    //     'image', 'table', 'link', 'hr', 'undo', 'redo'
-    // ],
-
     style: {
-        color: '#000000',     // Black text
-        fontSize: '12px',     // Size 12
+        color: '#000000',  
+        fontSize: '12px',    
         fontFamily: 'Arial, sans-serif'
     },
 
@@ -77,11 +68,3 @@ editor.events.on('change', () => {
 });
 
 vscode.postMessage({ command: 'webviewReady' });
-
-//TODO: How do we post a msg to the extension
-// Send a message with the new html content when the user wants to save their progress
-//const html = editor.value;
-//vscode.postMessage({
-//    command: "saveNote",
-//    html: html
-//});

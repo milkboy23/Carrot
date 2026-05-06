@@ -15,7 +15,7 @@ export class CommentManager{
         this.workspaceState.get<number>("nextCommentId", 0);
     }
 
-    public static getInstance(workspaceState: vscode.Memento){
+    public static getInstance(workspaceState: vscode.Memento) : CommentManager {
         if (!this.instance) {
             CommentManager.instance = new CommentManager(workspaceState);
         }

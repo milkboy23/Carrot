@@ -4,22 +4,23 @@ import { Comment } from "./Comment";
 import { Panel } from "./Panel";
 
 import { CommentManager } from './CommentManager';
-import { NoteManager } from './NoteManager';
 
 let carrotDecorationType: vscode.TextEditorDecorationType;
+let commentManager: CommentManager;
 
 export async function activate(context: vscode.ExtensionContext) : Promise<vscode.ExtensionContext> {
-
-	
 	// Create one instance of the decoration type
 	carrotDecorationType = Comment.createDecorationType(context);
 	// Registers the decoration type as a part of the extension.
 	context.subscriptions.push(carrotDecorationType);
 
+	// Get the instance of the CommentManager Singleton
+	commentManager = CommentManager.getInstance(context.workspaceState);
+
 	// Listen for changing the tab/file
 	vscode.window.onDidChangeActiveTextEditor(editor => {
 		if (editor) {
-			restoreCommentsForEditor(context, editor);
+			restoreCommentsForEditor(editor);
 		}
 	});
 
@@ -27,22 +28,22 @@ export async function activate(context: vscode.ExtensionContext) : Promise<vscod
 	vscode.workspace.onDidOpenTextDocument(doc => {
 		const editor = vscode.window.visibleTextEditors.find(active => active.document === doc);
 		if (editor) {
-			restoreCommentsForEditor(context, editor);
+			restoreCommentsForEditor(editor);
 		}
 	});
 
 	vscode.workspace.onDidChangeTextDocument(event => {
 		const editor = vscode.window.activeTextEditor;
 		if(editor && event.document === editor.document){
-			CommentManager.getInstance(context.workspaceState).shiftComments(editor.document.uri, event);
-			restoreCommentsForEditor(context, editor);
+			commentManager.shiftComments(editor.document.uri, event);
+			restoreCommentsForEditor(editor);
 		}
 	});
 
 
 	// Check if the current window has an active text editor
 	if (vscode.window.activeTextEditor) {
-		restoreCommentsForEditor(context, vscode.window.activeTextEditor);
+		restoreCommentsForEditor(vscode.window.activeTextEditor);
 	};
 
 
@@ -66,7 +67,7 @@ export async function activate(context: vscode.ExtensionContext) : Promise<vscod
 				vscode.window.showErrorMessage("Unable to create Carrot Comment. Please try again.");
 			}
 			if (vscode.window.activeTextEditor) {
-					restoreCommentsForEditor(context, vscode.window.activeTextEditor);
+					restoreCommentsForEditor(vscode.window.activeTextEditor);
 			}
 		})
 	);
@@ -79,7 +80,7 @@ export async function activate(context: vscode.ExtensionContext) : Promise<vscod
 			const deleted = await Comment.deleteComment(vscode.window.activeTextEditor, context);
 			
 			if (vscode.window.activeTextEditor && deleted) {
-				restoreCommentsForEditor(context, vscode.window.activeTextEditor);
+				restoreCommentsForEditor(vscode.window.activeTextEditor);
 			} else {
 				vscode.window.showErrorMessage("Unable to delete Carrot Comment. Please try again.");
 			}
@@ -107,8 +108,8 @@ export async function activate(context: vscode.ExtensionContext) : Promise<vscod
  * @param context 
  * @param editor 
  */
-function restoreCommentsForEditor(context: vscode.ExtensionContext, editor: vscode.TextEditor) {
-	const comments = CommentManager.getInstance(context.workspaceState).getCommentsForEditor(editor.document.uri);
+function restoreCommentsForEditor(editor: vscode.TextEditor) {
+	const comments = commentManager.getCommentsForEditor(editor.document.uri);
 	let markdownComment: vscode.MarkdownString = new vscode.MarkdownString("");
 
 	const decorationOptions: vscode.DecorationOptions[] = [];
