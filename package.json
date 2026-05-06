@@ -4,7 +4,7 @@
   "license": "MIT License",
   "displayName": "Carrot Comments Extension",
   "description": "",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "icon": "media/images/carrot-decoration.png",
   "engines": {
     "vscode": "^1.109.0"
@@ -19,7 +19,7 @@
   "activationEvents": [
     "onView: carrot-sidebar-view"
   ],
-  "main": "./dist/extension.js",
+  "main": "./out/extension.js",
   "contributes": {
     "viewsContainers": {
       "activitybar": [
@@ -85,16 +85,14 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "npm run package",
+    "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src",
     "test": "vscode-test",
     "build-webview": "node esbuild.js",
-    "watch-webview": "node esbuild.js --watch",
-    "check-types": "tsc --noEmit",
-    "package": "npm run check-types && node esbuild.js --production"
+    "watch-webview": "node esbuild.js --watch"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.10",
@@ -106,8 +104,7 @@
     "esbuild": "^0.27.4",
     "eslint": "^9.39.3",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.56.1",
-    "@vscode/vsce": "^2.x.x"
+    "typescript-eslint": "^8.56.1"
   },
   "dependencies": {
     "jodit": "^4.11.15",
