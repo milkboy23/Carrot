@@ -1,9 +1,8 @@
 import * as vscode from "vscode";
 import { CommentManager } from "./CommentManager";
 import { NoteManager } from "./NoteManager";
-import { Console } from "console";
 
-export class Comment{
+export class Comment {
     /**
      * Creates the Carrot Comment and its associated Carrot Note.
      * @param context 

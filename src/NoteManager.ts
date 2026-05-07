@@ -12,7 +12,7 @@ export class NoteManager {
         this.workspaceState.get<number>("nextNoteId", 0);
     }
 
-    public static getInstance(workspaceState: vscode.Memento){
+    public static getInstance(workspaceState: vscode.Memento) : NoteManager {
         if (!this.instance) {
             NoteManager.instance = new NoteManager(workspaceState);
         }
