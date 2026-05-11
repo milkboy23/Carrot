@@ -10,7 +10,7 @@ export class Panel {
     private _disposables: vscode.Disposable[] = [];
 	private _noteId: number;
 
-    constructor(context: vscode.ExtensionContext, panel: vscode.WebviewPanel, extensionUri: vscode.Uri, noteId: number){
+    constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri, noteId: number){
         this._panel = panel;
         this._extensionUri = extensionUri;
 		this._noteId = noteId;
@@ -37,7 +37,7 @@ export class Panel {
 			message => {
 				switch (message.command) {
 					case 'webviewReady':
-						const noteHtml = NoteManager.getInstance(context.workspaceState).loadNote(this._noteId);
+						const noteHtml = NoteManager.getInstanceWOWorkspace().loadNote(this._noteId);
 						this._panel.webview.postMessage({ 
 							command: 'loadNote', 
 							html: noteHtml
@@ -47,7 +47,7 @@ export class Panel {
 						vscode.window.showErrorMessage(message.text);
 						return;
 					case 'contentChanged':
-						NoteManager.getInstance(context.workspaceState).saveNote(this._noteId, this._extensionUri, message.html);
+						NoteManager.getInstanceWOWorkspace().saveNote(this._noteId, this._extensionUri, message.html);
 						return;
 				}
 			},
@@ -103,7 +103,7 @@ export class Panel {
         );
         
         // Set the panel.
-        Panel.currentPanel = new Panel(context, panel, extensionUri, noteId);
+        Panel.currentPanel = new Panel(panel, extensionUri, noteId);
     }
 
     private _update(){

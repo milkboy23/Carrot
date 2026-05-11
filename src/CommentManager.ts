@@ -1,8 +1,6 @@
 import * as vscode from 'vscode';
 import { SerializedComment } from './SerializedComment';
-import { SerializedNote } from './SerializedNote';
 import { NoteManager } from './NoteManager';
-import { Comment } from './Comment';
 
 export class CommentManager{
 

@@ -19,6 +19,13 @@ export class NoteManager {
         return NoteManager.instance;
     }
 
+    public static getInstanceWOWorkspace() : NoteManager {
+        if (!this.instance) {
+            vscode.window.showErrorMessage("Failed to get instance of NoteManager. Restart Extension.");
+        }
+        return NoteManager.instance;
+    }
+
     public async addNote(editorUri: vscode.Uri, hoverMessage: string) : Promise<number> {
         const allNotes = this.workspaceState.get<SerializedNote[]>("notes", []);
 
