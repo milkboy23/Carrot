@@ -99,7 +99,7 @@ export async function activate(context: vscode.ExtensionContext) : Promise<vscod
 			const decodedArgs = decodeURIComponent(args);
 			const noteId = parseInt(decodedArgs);			
 
-			Panel.createOrShow(context, context.extensionUri, noteId);
+			Panel.create(context.extensionUri, noteId);
 		})
 	);
 	return context;

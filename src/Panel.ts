@@ -10,6 +10,10 @@ export class Panel {
     private _disposables: vscode.Disposable[] = [];
 	private _noteId: number;
 
+	/**
+	 * Create a new panel
+	 * Prepare for message passing between extension note manager and Jodit
+	 */
     constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri, noteId: number){
         this._panel = panel;
         this._extensionUri = extensionUri;
@@ -77,21 +81,19 @@ export class Panel {
 	
     }
 
-    public static createOrShow(context: vscode.ExtensionContext, extensionUri: vscode.Uri, noteId: number) {
+	/**
+	 * On open note, create a new panel.
+	 * Always create a new panel to ensure the html is fetched correctly from the database
+	 */
+    public static create(extensionUri: vscode.Uri, noteId: number) {
 		
         // Creates a column based on the text editor. Checks for null.
         const column = vscode.window.activeTextEditor
 			? vscode.window.activeTextEditor.viewColumn
 			: undefined;
 
-        // If we already made a panel, show it, because we are limited to one panel.
-        // if (Panel.currentPanel) {
-        //     Panel.currentPanel._panel.reveal(column);
-        //     return;
-        // }
-		// If we already made a panel, update the content
 
-        // otherwise, create new panel.
+        // Create a new panel.
         const panel = vscode.window.createWebviewPanel(
             Panel._viewType, // Identifies the type of the webview. 
             'Carrot Note ' + noteId.toString(), // Title of the panel displayed to the user
@@ -106,6 +108,9 @@ export class Panel {
         Panel.currentPanel = new Panel(panel, extensionUri, noteId);
     }
 
+	/** 
+	 * Update the webview for the panel 
+	 */
     private _update(){
         const webview = this._panel.webview;
 
@@ -113,6 +118,9 @@ export class Panel {
 		this._panel.webview.html = this._getHtmlForWebview(webview);
     }
 
+	/**
+	 * Build the html for the webview in the panel
+	 */
    	private _getHtmlForWebview(webview: vscode.Webview) {
 		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'webview.js'));
 		const joditStyleUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'webview.css'));
