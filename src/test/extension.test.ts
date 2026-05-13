@@ -48,7 +48,7 @@ suite('Extension Test Suite', () => {
 
 
 		// Setting up a mock NoteManager and mock Note fields
-		nm = NoteManager.getInstance(fakeContext.workspaceState);
+		nm = NoteManager.makeOrGetInstance(fakeContext.workspaceState);
 		docUri = "src/test/workspace/testWorkspaceFile.ts" as unknown as vscode.Uri;
 		html = "Hyper Text Markup Language";
 	});
@@ -89,8 +89,8 @@ suite('Extension Test Suite', () => {
 
 	// NoteManager tests
 	test('Testing getInstance, that NoteManager is a Singleton', () => {
-		const instance1 = NoteManager.getInstance(fakeContext.workspaceState);
-		const instance2 = NoteManager.getInstance(fakeContext.workspaceState);
+		const instance1 = NoteManager.makeOrGetInstance(fakeContext.workspaceState);
+		const instance2 = NoteManager.makeOrGetInstance(fakeContext.workspaceState);
 
 		assert.strictEqual(instance1, instance2);
 	});

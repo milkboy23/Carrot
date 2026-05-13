@@ -13,6 +13,9 @@ export class CommentManager{
         this.workspaceState.get<number>("nextCommentId", 0);
     }
 
+    /**
+     * Get the singleton instance of the commentmanager for this workspace state
+     */
     public static getInstance(workspaceState: vscode.Memento) : CommentManager {
         if (!this.instance) {
             CommentManager.instance = new CommentManager(workspaceState);
@@ -20,7 +23,9 @@ export class CommentManager{
         return CommentManager.instance;
     }
     
-    // adding a comment to the workspaceState by getting its primitive types and pushing to the comments array 
+    /**
+     * adding a comment to the workspaceState by getting its primitive types and pushing to the comments array 
+     */
     public async addComment(noteId: number, editorUri: vscode.Uri, start: number, hoverMessage: string){
         const allComments = this.workspaceState.get<SerializedComment[]>("comments", []);
 
@@ -38,14 +43,18 @@ export class CommentManager{
         await this.workspaceState.update("comments", allComments);
     }        
 
-    // gets the comments of the current editor by filtering through all comments
+    /**
+     * gets the comments of the current editor by filtering through all comments
+     */
     public getCommentsForEditor(editorUri: vscode.Uri) : SerializedComment[] {
         const allComments = this.workspaceState.get<SerializedComment[]>("comments", []);
         const editorComments = allComments.filter(c => c.editorUri === editorUri.toString());
         return editorComments;
     }
 
-    // gets the comments of the current editor and line by filtering through all comments
+    /**
+     * gets the comments of the current editor and line by filtering through all comments
+     */
     public getCommentsForLocation(editorUri: vscode.Uri, position: vscode.Position) : SerializedComment[] {
         const allComments = this.workspaceState.get<SerializedComment[]>("comments", []);
         const editorComments = allComments.filter(c => c.editorUri === editorUri.toString());
@@ -53,6 +62,9 @@ export class CommentManager{
         return positionComments;
     }
 
+    /**
+     * Delete the selected comments
+     */
     public async deleteComments(commentsToDelete: SerializedComment[]) {
         // New list for comments NOT to be deleted
         const newCommentList: SerializedComment[] = [];
@@ -69,7 +81,7 @@ export class CommentManager{
                 }
              }
         }
-        await NoteManager.getInstance(this.workspaceState).deleteNote(notesToDelete);
+        await NoteManager.makeOrGetInstance(this.workspaceState).deleteNote(notesToDelete);
         await this.workspaceState.update("comments", newCommentList);
     }
 

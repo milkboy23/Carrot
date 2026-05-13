@@ -8,7 +8,7 @@ import { NoteManager } from './NoteManager';
 
 let carrotDecorationType: vscode.TextEditorDecorationType;
 let commentManager: CommentManager;
-let noteManager: NoteManager;
+let noteManager: NoteManager; // to ensure notemanager is always instantiated with the workspacestate
 
 export async function activate(context: vscode.ExtensionContext) : Promise<vscode.ExtensionContext> {
 	// Create one instance of the decoration type
@@ -18,7 +18,8 @@ export async function activate(context: vscode.ExtensionContext) : Promise<vscod
 
 	// Get the instance of the CommentManager Singleton
 	commentManager = CommentManager.getInstance(context.workspaceState);
-	noteManager = NoteManager.getInstance(context.workspaceState);
+	// Make or get the instance of the CommentManager Singleton
+	noteManager = NoteManager.makeOrGetInstance(context.workspaceState);
 
 	// Listen for changing the tab/file
 	vscode.window.onDidChangeActiveTextEditor(editor => {

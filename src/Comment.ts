@@ -53,7 +53,7 @@ export class Comment {
         }
 
         // Create a serialized note for the comment and returns it id
-        const noteId = await NoteManager.getInstance(context.workspaceState).addNote(editor.document.uri, html);
+        const noteId = await NoteManager.makeOrGetInstance(context.workspaceState).addNote(editor.document.uri, html);
 
         // Add the new comment to the comment manager with the new note id
         CommentManager.getInstance(context.workspaceState).addComment(noteId, editor.document.uri, decorationLine, cleanMarkdown);

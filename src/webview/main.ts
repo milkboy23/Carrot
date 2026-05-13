@@ -58,7 +58,6 @@ window.addEventListener('message', event => {
     }
 });
 
-// Optional: Communicate with the Extension Host
 const vscode = (window as any).acquireVsCodeApi();
 editor.events.on('change', () => {
     vscode.postMessage({

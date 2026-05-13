@@ -41,7 +41,7 @@ export class Panel {
 			message => {
 				switch (message.command) {
 					case 'webviewReady':
-						const noteHtml = NoteManager.getInstanceWOWorkspace().loadNote(this._noteId);
+						const noteHtml = NoteManager.getInstance().loadNote(this._noteId);
 						this._panel.webview.postMessage({ 
 							command: 'loadNote', 
 							html: noteHtml
@@ -51,7 +51,7 @@ export class Panel {
 						vscode.window.showErrorMessage(message.text);
 						return;
 					case 'contentChanged':
-						NoteManager.getInstanceWOWorkspace().saveNote(this._noteId, this._extensionUri, message.html);
+						NoteManager.getInstance().saveNote(this._noteId, this._extensionUri, message.html);
 						return;
 				}
 			},
@@ -127,7 +127,6 @@ export class Panel {
 		
 		const freeDrawScriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'index.js'));
 		const freeDrawStyleUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'index.css'));
-		const faviconSrc = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'out', 'assets', 'favicon.png'));
 
 		return `
 			<!DOCTYPE html>
@@ -136,7 +135,6 @@ export class Panel {
 				<meta charset="UTF-8">
 				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 				<script src="https://cdn.tailwindcss.com"></script>
-				<link rel="icon" type="image/png" href="${faviconSrc}" />
 				
 				<link rel="stylesheet" href="${joditStyleUri}">
 				<link rel="stylesheet" href="${freeDrawStyleUri}">

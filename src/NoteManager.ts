@@ -12,20 +12,30 @@ export class NoteManager {
         this.workspaceState.get<number>("nextNoteId", 0);
     }
 
-    public static getInstance(workspaceState: vscode.Memento) : NoteManager {
+    /**
+     * When the instance may not have been created
+     */
+    public static makeOrGetInstance(workspaceState: vscode.Memento) : NoteManager {
         if (!this.instance) {
             NoteManager.instance = new NoteManager(workspaceState);
         }
         return NoteManager.instance;
     }
 
-    public static getInstanceWOWorkspace() : NoteManager {
+    /**
+     * When the instance should have already been created 
+     * For components which should not access the workspace state
+     */
+    public static getInstance() : NoteManager {
         if (!this.instance) {
             vscode.window.showErrorMessage("Failed to get instance of NoteManager. Restart Extension.");
         }
         return NoteManager.instance;
     }
 
+    /**
+     * Add a note to the workspace state
+     */
     public async addNote(editorUri: vscode.Uri, hoverMessage: string) : Promise<number> {
         const allNotes = this.workspaceState.get<SerializedNote[]>("notes", []);
 
@@ -66,13 +76,15 @@ export class NoteManager {
     /**
      * Load a note from memory based on its id.
      */
-
     public loadNote(id: number): string | undefined {
         const allNotes = this.workspaceState.get<SerializedNote[]>("notes", []);
         const note = allNotes.find(note => note.id === id);
         return note ? note.html : undefined;
     }  
 
+    /**
+     * Delete a note from the workspace state
+     */
     public async deleteNote(idsToDelete: number[]) {
         const allNotes = this.workspaceState.get<SerializedNote[]>("notes", []);
         const newNoteList: SerializedNote[] = [];
