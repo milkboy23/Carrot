@@ -59,6 +59,15 @@ This extension contributes the following settings:
 * keybindings `command + option + c` / `ctrl + alt + c` to create a Carrot Comment
 * keybindings `command + option + l` / `ctrl + alt + d` to delete a Carrot Comment
 
+## Installation Guide
+
+1. Locate the latest release in [Releases]{https://github.com/milkboy23/Carrot/releases} and download the attached .vsix file
+2. Open your VSCode IDE
+3. Open the Extenions tab in the sidebar
+4. Click on the three dots button "Views and More Actions" in the top right corner of the EXTENSIONS sidebar
+5. Select "Install from VSIX..."
+6. Select your downloaded .vsix file and click install
+
 ## Known Issues
 Text button in whiteboard feature is inconsistent in showing text.
 
