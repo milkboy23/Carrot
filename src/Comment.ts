@@ -80,22 +80,35 @@ export class Comment {
 
     static async deleteComment(editor: vscode.TextEditor | undefined, context: vscode.ExtensionContext) : Promise<boolean>{
         if(!editor){
+            vscode.window.showWarningMessage("No active editor. Please highlight text next to a Carrot Icon and run the command again.");
+            return false;
+        }
+
+        
+        //Get highlighted text
+        const selection = editor.selection;
+        if(editor.selection.isEmpty){
             vscode.window.showWarningMessage("No text highlighted. Please highlight text next to a Carrot Icon.");
             return false;
         }
 
-        //Get highlighted text
-        const selection = editor.selection;
         const start = selection.start;
 
+        const commentsToDelete = CommentManager.getInstance(context.workspaceState).getCommentsForLocation(editor.document.uri, start);
+
+        if (commentsToDelete.length === 0) {
+            vscode.window.showWarningMessage("No Carrot Comments found at selected location. Highlight the line next to a Carrot Icon and try again.");
+            return false;
+        }
+
+        const s = start.line.toString();
+        const e = selection.end.line.toString();
         const userAction = await vscode.window.showWarningMessage(
-                                'Are you sure you want to delete this Carrot Comment',
+                                'Are you sure you want to delete Carrot Comments on lines ' + s + ' to ' + e,
                                 'Delete',
                                 'Cancel');
         if (userAction === 'Delete') {
-            const commentsToDelete = CommentManager.getInstance(context.workspaceState).getCommentsForLocation(editor.document.uri, start);
-
-            await CommentManager.getInstance(context.workspaceState).deleteComments(commentsToDelete);
+            await CommentManager.getInstance(context.workspaceState).deleteComsById(commentsToDelete);
             vscode.window.showInformationMessage("Carrot Comment deleted successfully!");
             return true;
         } else {
