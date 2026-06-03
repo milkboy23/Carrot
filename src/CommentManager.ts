@@ -55,16 +55,24 @@ export class CommentManager{
     /**
      * gets the comments of the current editor and line by filtering through all comments
      */
-    public getCommentsForLocation(editorUri: vscode.Uri, position: vscode.Position) : SerializedComment[] {
+    public getCommentsForLocation(editorUri: vscode.Uri, startLine: number, endLine: number) : number[] {
         const allComments = this.workspaceState.get<SerializedComment[]>("comments", []);
         const editorComments = allComments.filter(c => c.editorUri === editorUri.toString());
-        const positionComments = editorComments.filter(c => c.start === position.line);
-        return positionComments;
+
+        const lineCount = endLine - startLine;
+        let ids:number[] = [];
+
+        for (let line = startLine; line < startLine + lineCount + 1; line++) {
+            const positionComments = editorComments.filter(c => c.start === line);
+            for (const c of positionComments) {
+                ids.push(c.id);
+            } 
+        }
+        
+        return ids;
     }
 
-    /**
-     * Delete the selected comments
-     */
+    /* Deprecated method
     public async deleteComments(commentsToDelete: SerializedComment[]) {
         // New list for comments NOT to be deleted
         const newCommentList: SerializedComment[] = [];
@@ -76,13 +84,28 @@ export class CommentManager{
             for(const comment of allComments){
                 if (commentToDelete.id === comment.id ) {
                     notesToDelete.push(comment.noteId);
-                } else {
-                    newCommentList.push(comment);
-                }
+                    allComments.filter(c => c.id != commentToDelete.id)
+                } 
              }
         }
         await NoteManager.makeOrGetInstance(this.workspaceState).deleteNote(notesToDelete);
-        await this.workspaceState.update("comments", newCommentList);
+        await this.workspaceState.update("comments", allComments);
+    }
+        */
+
+    /**
+     * Delete the selected comments
+     */
+    public async deleteComsById(idsToDelete: number[]){
+        const allComments = this.workspaceState.get<SerializedComment[]>("comments", []);
+        let newComments = allComments;
+        
+        for (const id of idsToDelete) {
+            newComments = newComments.filter(c => c.id !== id);
+        }
+
+        await NoteManager.makeOrGetInstance(this.workspaceState).deleteNote(idsToDelete);
+        await this.workspaceState.update("comments", newComments);
     }
 
     /**

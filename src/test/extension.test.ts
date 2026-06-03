@@ -80,7 +80,7 @@ suite('Extension Test Suite', () => {
 	test('Testing deleteComments, deleting a comment through CommentManager', async () => {
 		await cm.addComment(noteId, uri, start, hoverMessage);
 		const comment = {id: 1, noteId: noteId, editorUri: uri.toString(), start: start, hoverMessage: hoverMessage};
-		await cm.deleteComments([comment]);
+		await cm.deleteComsById([1]);
 		const commentList = fakeContext.workspaceState.get<SerializedComment[]>("comments", []);
 
 		assert.strictEqual(commentList.length, 0);

@@ -73,8 +73,7 @@
       {
         "command": "carrot.deleteCarrot",
         "key": "ctrl+alt+d",
-        "mac": "cmd+alt+l",
-        "when": "editor.hasSelection"
+        "mac": "cmd+alt+l"      
       },
       {
         "command": "carrot.commentAndNote",
