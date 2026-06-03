@@ -55,14 +55,20 @@ export class CommentManager{
     /**
      * gets the comments of the current editor and line by filtering through all comments
      */
-    public getCommentsForLocation(editorUri: vscode.Uri, position: vscode.Position) : number[] {
+    public getCommentsForLocation(editorUri: vscode.Uri, startLine: number, endLine: number) : number[] {
         const allComments = this.workspaceState.get<SerializedComment[]>("comments", []);
         const editorComments = allComments.filter(c => c.editorUri === editorUri.toString());
-        const positionComments = editorComments.filter(c => c.start === position.line);
+
+        const lineCount = endLine - startLine
         let ids:number[] = [];
-        for (const c of positionComments) {
-            ids.push(c.id)
+
+        for (let line = startLine; line < startLine + lineCount + 1; line++) {
+            const positionComments = editorComments.filter(c => c.start === line);
+            for (const c of positionComments) {
+                ids.push(c.id)
+            } 
         }
+        
         return ids;
     }
 

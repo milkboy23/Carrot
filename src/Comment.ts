@@ -93,18 +93,24 @@ export class Comment {
         }
 
         const start = selection.start;
+        const startLine = selection.start.line;
+        const endLine = selection.end.line;
 
-        const commentsToDelete = CommentManager.getInstance(context.workspaceState).getCommentsForLocation(editor.document.uri, start);
+        const commentsToDelete = CommentManager.getInstance(context.workspaceState).getCommentsForLocation(editor.document.uri, startLine, endLine);
 
         if (commentsToDelete.length === 0) {
             vscode.window.showWarningMessage("No Carrot Comments found at selected location. Highlight the line next to a Carrot Icon and try again.");
             return false;
         }
 
-        const s = start.line.toString();
-        const e = selection.end.line.toString();
+        const s = (startLine+1).toString(); // off by one so add one
+        const e = (endLine+1).toString();
+        let ComOrComs = "Comment";
+        if (commentsToDelete.length > 1){
+            ComOrComs = "Comments";
+        }
         const userAction = await vscode.window.showWarningMessage(
-                                'Are you sure you want to delete Carrot Comments on lines ' + s + ' to ' + e,
+                                'Are you sure you want to delete the Carrot ' + ComOrComs + ' on lines ' + s + ' to ' + e,
                                 'Delete',
                                 'Cancel');
         if (userAction === 'Delete') {
