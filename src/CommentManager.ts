@@ -59,13 +59,13 @@ export class CommentManager{
         const allComments = this.workspaceState.get<SerializedComment[]>("comments", []);
         const editorComments = allComments.filter(c => c.editorUri === editorUri.toString());
 
-        const lineCount = endLine - startLine
+        const lineCount = endLine - startLine;
         let ids:number[] = [];
 
         for (let line = startLine; line < startLine + lineCount + 1; line++) {
             const positionComments = editorComments.filter(c => c.start === line);
             for (const c of positionComments) {
-                ids.push(c.id)
+                ids.push(c.id);
             } 
         }
         
@@ -101,7 +101,7 @@ export class CommentManager{
         let newComments = allComments;
         
         for (const id of idsToDelete) {
-            newComments = newComments.filter(c => c.id != id)
+            newComments = newComments.filter(c => c.id !== id);
         }
 
         await NoteManager.makeOrGetInstance(this.workspaceState).deleteNote(idsToDelete);
