@@ -55,7 +55,6 @@ You can find the keybinds at anytime in the sidebar.
 
 This extension contributes the following settings:
 
-* `myExtension.enable`: Enable/disable this extension.
 * keybindings `command + option + c` / `ctrl + alt + c` to create a Carrot Comment
 * keybindings `command + option + l` / `ctrl + alt + d` to delete a Carrot Comment
 
