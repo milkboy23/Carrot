@@ -115,7 +115,7 @@ export class Comment {
                                 'Cancel');
         if (userAction === 'Delete') {
             await CommentManager.getInstance(context.workspaceState).deleteComsById(commentsToDelete);
-            vscode.window.showInformationMessage("Carrot Comment deleted successfully!");
+            vscode.window.showInformationMessage("Carrot" + ComOrComs + "deleted successfully!");
             return true;
         } else {
             vscode.window.showInformationMessage("Action cancelled. The Carrot Comment was not deleted.");

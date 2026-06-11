@@ -72,27 +72,6 @@ export class CommentManager{
         return ids;
     }
 
-    /* Deprecated method
-    public async deleteComments(commentsToDelete: SerializedComment[]) {
-        // New list for comments NOT to be deleted
-        const newCommentList: SerializedComment[] = [];
-        // Get all the old comments
-        const allComments = this.workspaceState.get<SerializedComment[]>("comments", []);
-        const notesToDelete: number[] = [];
-        // Nested for loop: for each comment to delete, we compare it to all the old comments
-        for (const commentToDelete of commentsToDelete) {
-            for(const comment of allComments){
-                if (commentToDelete.id === comment.id ) {
-                    notesToDelete.push(comment.noteId);
-                    allComments.filter(c => c.id != commentToDelete.id)
-                } 
-             }
-        }
-        await NoteManager.makeOrGetInstance(this.workspaceState).deleteNote(notesToDelete);
-        await this.workspaceState.update("comments", allComments);
-    }
-        */
-
     /**
      * Delete the selected comments
      */
